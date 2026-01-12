@@ -1,0 +1,9 @@
+{
+  "id": "uatr:organizations/W23WZ55B",
+  "type": "EducationProgram",
+  "subOrganizationOf": "uatr:organizations/5VDVCRYM",
+  "name": {
+    "en": "Night School Program",
+    "ja": "先端工学基礎課程"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "uatr:organizations/O757DEDB",
+  "type": "Cluster",
+  "subOrganizationOf": "uatr:organizations/5VDVCRYM",
+  "name": {
+    "en": "Cluster III (Fundamental Science and Engineering)",
+    "ja": "Ⅲ類（理工系）"
+  }
+}

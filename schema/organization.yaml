@@ -1,0 +1,94 @@
+id: uats:organization
+name: uec_atlas_organization
+title: "UEC Atlas Organization Ontology"
+
+prefixes:
+  uato: https://uec-atlas.e-chan1007.workers.dev/ontology/
+  uatr: https://uec-atlas.e-chan1007.workers.dev/resources/
+  uats: https://uec-atlas.e-chan1007.workers.dev/schema/
+  org: http://www.w3.org/ns/org#
+  schema: http://schema.org/
+  hydra: http://www.w3.org/ns/hydra/core#
+  void: http://rdfs.org/ns/void#
+  linkml: https://w3id.org/linkml/
+
+imports:
+  - common
+
+default_prefix: uato
+
+classes:
+  Organization:
+    is_a: NamedThing
+    description: "組織"
+    tree_root: true
+    slots:
+      - hasSubOrganization
+      - subOrganizationOf
+    attributes:
+      type:
+        description: "組織の種類"
+        required: true
+        designates_type: true
+        range: string
+    slot_usage:
+      id:
+        pattern: "^uatr:organizations/"
+
+  AbstractEducationalOrganization:
+    abstract: true
+    description: "学生が所属する教育組織"
+    is_a: Organization
+    class_uri: schema:EducationalOccupationalProgram
+
+  University:
+    is_a: Organization
+    class_uri: schema:CollegeOrUniversity
+    description: "大学"
+    slots:
+      - address
+    slot_usage:
+      id:
+        pattern: "^uatr:organizations/UEC$"
+      address:
+        required: true
+
+  Faculty:
+    is_a: AbstractEducationalOrganization
+    description: "学域"
+
+  GraduateSchool:
+    is_a: AbstractEducationalOrganization
+    description: "研究科"
+
+  Cluster:
+    is_a: AbstractEducationalOrganization
+    description: "類"
+
+  EducationProgram:
+    is_a: AbstractEducationalOrganization
+    description: "教育プログラム"
+
+  Department:
+    is_a: AbstractEducationalOrganization
+    description: "専攻"
+
+slots:
+  hasSubOrganization:
+    description: "下位組織"
+    slot_uri: org:hasSubOrganization
+    range: Organization
+    inlined: true
+    inlined_as_list: true
+    multivalued: true
+    annotations:
+      jsonld_container: "@set"
+  subOrganizationOf:
+    description: "上位組織"
+    slot_uri: org:subOrganizationOf
+    range: Organization
+  address:
+    description: "大学の所在地"
+    slot_uri: schema:address
+    range: PostalAddress
+    inlined: true

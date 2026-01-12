@@ -1,0 +1,91 @@
+id: uats:common
+name: uec_atlas_common
+title: UEC Atlas Common Definitions
+description: Common prefixes, types, and base classes for the UEC Atlas project.
+license: https://creativecommons.org/publicdomain/zero/1.0/
+prefixes:
+  linkml: https://w3id.org/linkml/
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  hydra: http://www.w3.org/ns/hydra/core#
+  void: http://rdfs.org/ns/void#
+  schema: http://schema.org/
+  uato: https://uec-atlas.e-chan1007.workers.dev/ontology/
+  uatr: https://uec-atlas.e-chan1007.workers.dev/resources/
+  uats: https://uec-atlas.e-chan1007.workers.dev/schema/
+
+imports:
+  - linkml:types
+
+default_prefix: uato
+default_range: string
+emit_prefixes:
+  - uatr
+
+types:
+  I18NString:
+    uri: rdf:langString
+    base: str
+    typeof: string
+    description: "A language-tagged string"
+    annotations:
+      jsonld_container: "@language"
+
+classes:
+  Any:
+    class_uri: linkml:Any
+  NamedThing:
+    abstract: true
+    id_prefixes:
+      - uatr
+    slots:
+      - id
+      - name
+  PostalAddress:
+    class_uri: schema:PostalAddress
+    attributes:
+      streetAddress:
+        description: "丁目・番地"
+        slot_uri: schema:streetAddress
+        range: I18NString
+      addressLocality:
+        description: "市区町村"
+        slot_uri: schema:addressLocality
+        range: I18NString
+      addressRegion:
+        description: "都道府県"
+        slot_uri: schema:addressRegion
+        range: I18NString
+      postalCode:
+        description: "郵便番号"
+        slot_uri: schema:postalCode
+        range: string
+      addressCountry:
+        description: "国"
+        slot_uri: schema:addressCountry
+        range: string
+
+slots:
+  id:
+    identifier: true
+    slot_uri: schema:identifier
+    range: string
+  type:
+    required: true
+    slot_uri: rdf:type
+    range: uriorcurie
+    annotations:
+      jsonld_id: "@type"
+  name:
+    slot_uri: schema:name
+    exact_mappings:
+      - rdfs:label
+    range: I18NString
+    inlined: true
+    multivalued: true
+    annotations:
+      jsonld_container: "@language"
+  description:
+    slot_uri: schema:description
+    range: string

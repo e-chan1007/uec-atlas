@@ -1,0 +1,16 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "data/organizations/*.json"
+      ],
+      "url": "./generated/organization.schema.json"
+    }
+  ],
+  "yaml.schemas": {
+    "https://w3id.org/linkml/meta.schema.json": "schema/*.yaml"
+  },
+  "chat.tools.terminal.autoApprove": {
+    "make": true
+  }
+}

@@ -1,0 +1,17 @@
+/*
+  Access-Control-Allow-Origin: *
+
+/data/*
+  Content-Type: application/ld+json
+
+/data/organizations/*
+  Link: </schema/organization.context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json", </ontology/organization.ttl>; rel="describedby"; type="text/turtle"
+
+/ontology/*
+  Content-Type: text/turtle; charset=utf-8
+
+/schema/*.jsonld
+  Content-Type: application/ld+json
+
+/schema/*.schema.json
+  Content-Type: application/schema+json

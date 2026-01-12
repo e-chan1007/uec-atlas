@@ -1,0 +1,24 @@
+{
+  "id": "uatr:organizations/UEC",
+  "type": "University",
+  "name": {
+    "en": "The University of Electro-Communications",
+    "ja": "電気通信大学"
+  },
+  "address": {
+    "streetAddress": {
+      "en": "1-5-1 Chofugaoka",
+      "ja": "調布ケ丘1-5-1"
+    },
+    "addressLocality": {
+      "en": "Chofu",
+      "ja": "調布市"
+    },
+    "addressRegion": {
+      "en": "Tokyo",
+      "ja": "東京都"
+    },
+    "postalCode": "182-8585",
+    "addressCountry": "JP"
+  }
+}
