@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Noto Sans JP", sans-serif;
+}
+
+@plugin "daisyui" {
+  themes: light --default;
+  root: ":root";
+  prefix: "d-";
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #17288b;
+  --color-primary-content: #ffffff;
+  --color-secondary: #00afdd;
+}
+
+/*
+@plugin "daisyui/theme" {
+  name: "dark";
+  prefersdark: true;
+  --color-primary: #00afdd;
+  --color-secondary: #17288b;
+} */

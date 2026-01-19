@@ -1,15 +1,31 @@
 ---
-
+import Hero from "@/components/index/Hero.astro";
+import Section from "@/components/index/Section.astro";
+import Navbar from "@/components/Navbar.astro";
+import Layout from "@/layouts/Layout.astro";
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<Layout>
+  <Navbar />
+  <Hero />
+  <Section>
+    <h2>About</h2>
+    <p>ここにUEC Atlasの説明文が入ります。</p>
+  </Section>
+  <Section>
+    <h2>Get Started</h2>
+    <p>ここに説明文が入ります。</p>
+  </Section>
+  <Section>
+    <h2>Title</h2>
+    <p>ここに説明文が入ります。</p>
+  </Section>
+  <Section>
+    <h2>Title</h2>
+    <p>ここに説明文が入ります。</p>
+  </Section>
+  <Section>
+    <h2>Title</h2>
+    <p>ここに説明文が入ります。</p>
+  </Section>
+</Layout>

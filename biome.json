@@ -25,6 +25,9 @@
     }
   },
   "html": {
+    "formatter": {
+      "enabled": true
+    },
     "experimentalFullSupportEnabled": true
   },
   "assist": {
@@ -34,5 +37,24 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/*.astro"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }
