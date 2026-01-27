@@ -16,7 +16,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      external: ["oxigraph", "eyereasoner"],
+      external: ["eyereasoner"],
     },
     define: {
       // 依存ライブラリ内の __dirname を空文字やダミー値で置換する

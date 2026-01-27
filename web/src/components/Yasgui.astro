@@ -1,0 +1,36 @@
+---
+import { toFullURL } from "@/utils/url";
+import "@triply/yasgui/build/yasgui.min.css";
+---
+
+<yasgui-component data-endpoint={toFullURL("/sparql")}></yasgui-component>
+
+<script>
+  import yasgui from "@triply/yasgui";
+
+  class YasguiComponent extends HTMLElement {
+    connectedCallback() {
+      const endpoint = this.getAttribute("data-endpoint") || "";
+      const yasguiInstance = new yasgui(this, {
+        endpointCatalogueOptions: {
+          getData: () => [
+            {
+              endpoint,
+            },
+          ],
+        },
+        copyEndpointOnNewTab: true,
+        yasqe: {
+          prefixCcApi: "/schema/prefixes.json",
+          persistencyExpire: 0,
+        },
+      });
+      const tab = yasguiInstance.getTab();
+      if (tab) {
+        tab.setEndpoint(endpoint);
+      }
+    }
+  }
+
+  customElements.define("yasgui-component", YasguiComponent);
+</script>

@@ -44,50 +44,48 @@ export const prerender = true;
     <p class="leading-8 indent-4 tracking-wide">
       UEC Atlas では、電気通信大学に関連する多様なデータセットを提供しています。
     </p>
-    <div>
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-base-content"
-      >
-        <Card title="Organizations" icon="material-symbols:account-tree">
-          <p class="leading-6 tracking-wide">
-            大学内の各種組織(類、専攻、プログラムなど)の情報を提供しています。
-          </p>
-          <Fragment slot="actions">
-            <a
-              href="/page/organizations/all"
-              class="d-btn d-btn-primary d-btn-sm"
-            >
-              データを見る
-            </a>
-          </Fragment>
-        </Card>
-        <Card title="Courses" icon="material-symbols:menu-book">
-          <p class="leading-6 tracking-wide">
-            講義の概要やカリキュラムの情報を提供しています。
-          </p>
-          <Fragment slot="actions">
-            <a
-              href="/page/courses/all"
-              class="d-btn d-btn-primary d-btn-sm d-btn-disabled"
-            >
-              データを見る
-            </a>
-          </Fragment>
-        </Card>
-        <Card title="Spatial" icon="material-symbols:map">
-          <p class="leading-6 tracking-wide">
-            大学内の建物や施設の地理情報を提供しています。
-          </p>
-          <Fragment slot="actions">
-            <a
-              href="/page/spatial/all"
-              class="d-btn d-btn-primary d-btn-sm d-btn-disabled"
-            >
-              データを見る
-            </a>
-          </Fragment>
-        </Card>
-      </div>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-base-content"
+    >
+      <Card title="Organizations" icon="material-symbols:account-tree">
+        <p class="leading-6 tracking-wide">
+          大学内の各種組織(類、専攻、プログラムなど)の情報を提供しています。
+        </p>
+        <Fragment slot="actions">
+          <a
+            href="/page/organizations/all"
+            class="d-btn d-btn-primary d-btn-sm"
+          >
+            データを見る
+          </a>
+        </Fragment>
+      </Card>
+      <Card title="Courses" icon="material-symbols:menu-book">
+        <p class="leading-6 tracking-wide">
+          講義の概要やカリキュラムの情報を提供しています。
+        </p>
+        <Fragment slot="actions">
+          <a
+            href="/page/courses/all"
+            class="d-btn d-btn-primary d-btn-sm d-btn-disabled"
+          >
+            データを見る
+          </a>
+        </Fragment>
+      </Card>
+      <Card title="Spatial" icon="material-symbols:map">
+        <p class="leading-6 tracking-wide">
+          大学内の建物や施設の地理情報を提供しています。
+        </p>
+        <Fragment slot="actions">
+          <a
+            href="/page/spatial/all"
+            class="d-btn d-btn-primary d-btn-sm d-btn-disabled"
+          >
+            データを見る
+          </a>
+        </Fragment>
+      </Card>
     </div>
   </Section>
 
@@ -96,16 +94,25 @@ export const prerender = true;
     <p class="leading-8 indent-4 tracking-wide">
       UEC Atlas のデータは、以下の方法で取得できます。
     </p>
-    <ul class="list-disc list-inside space-y-2">
-      <li>
-        <strong>Download:</strong>
-        各データセットのページからJSON-LDファイルを直接ダウンロードできます。
-      </li>
-      <li>
-        <strong>SPARQL Endpoint:</strong>
-        SPARQLクエリを使用して、必要なデータを柔軟に取得できます。
-      </li>
-    </ul>
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 text-base-content"
+    >
+      <Card title="Download" icon="material-symbols:download">
+        <p class="leading-6 tracking-wide">
+          JSON-LD形式でデータを直接ダウンロードできます。
+        </p>
+      </Card>
+      <Card title="SPARQL" icon="material-symbols:query-stats">
+        <p class="leading-6 tracking-wide">
+          SPARQLクエリを使用して、必要なデータを柔軟に取得できます。
+        </p>
+        <Fragment slot="actions">
+          <a href="/sparql-playground" class="d-btn d-btn-primary d-btn-sm">
+            プレイグラウンドを開く
+          </a>
+        </Fragment>
+      </Card>
+    </div>
     <div class="d-mockup-code">
       <Code
         class="bg-transparent! px-4 before:hidden"

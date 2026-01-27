@@ -1,13 +1,43 @@
-import { text } from "node:stream/consumers";
-import { QueryEngine } from "@comunica/query-sparql";
 import type { APIRoute } from "astro";
+import { initOxigraph, Store } from "@/utils/oxigraph";
 import { toFullURL } from "@/utils/url";
 
-const engine = new QueryEngine();
+let cachedStore: Store | null = null;
 
-const DATA_SOURCES = [
-  toFullURL("/data/organizations/all.nq"),
+const SUPPORTED_SELECT_FORMATS = [
+  "application/sparql-results+json",
+  "application/sparql-results+xml",
+  "application/sparql-results+csv",
+  "text/csv",
+  "text/tab-separated-values",
 ];
+
+const SUPPORTED_CONSTRUCT_FORMATS = [
+  "text/turtle",
+  "application/json",
+  "application/ld+json",
+  "application/rdf+json",
+  "application/rdf+xml",
+  "application/n-triples",
+  "application/n-quads",
+  "application/trig",
+  "text/csv",
+  "text/tab-separated-values",
+];
+
+async function getStore(runtimeFetch: typeof fetch) {
+  await initOxigraph();
+  if (cachedStore) return cachedStore;
+
+  const res = await runtimeFetch(toFullURL("/data/organizations/all.nq"));
+  const nquads = await res.text();
+
+  const store = new Store();
+  store.load(nquads, { format: "application/n-quads" });
+
+  cachedStore = store;
+  return store;
+}
 
 const parseAccept = (accept: string) => {
   return accept
@@ -21,61 +51,71 @@ const parseAccept = (accept: string) => {
     .sort((a, b) => b.q - a.q);
 };
 
+const getQueryType = (query: string) => {
+  const match = query.match(
+    /(?:^|\s|;)(SELECT|ASK|CONSTRUCT|DESCRIBE)(?:\s|$)/i,
+  );
+  return match ? match[1].toUpperCase() : null;
+};
+
+const createFetch =
+  (env: Env) => async (input: URL | RequestInfo, init?: RequestInit) => {
+    return env.ASSETS.fetch(input, init)
+      .then((res) => {
+        if (res.status === 404) {
+          console.warn("Asset not found in ASSETS:", input);
+          throw new Error("Not found in ASSETS");
+        }
+        return res;
+      })
+      .catch(() => env.SELF.fetch(input, init));
+  };
+
 const executeQuery = async (
   query: string,
-  fetch: typeof globalThis.fetch,
+  runtimeFetch: typeof fetch,
   acceptedTypes: ReturnType<typeof parseAccept>,
 ) => {
-  const result = await engine.query(query, {
-    sources: DATA_SOURCES,
-    baseIRI: toFullURL("/"),
-    fetch
-  });
+  const store = await getStore(runtimeFetch);
+  const queryType = getQueryType(query);
 
-  const availableMediaTypes = Object.entries(
-    await engine.getResultMediaTypes(result),
-  )
-    .sort(([, q], [, p]) => p - q)
-    .map(([type]) => type);
+  if (!queryType) {
+    throw new Error("Could not determine query type");
+  }
 
+  const isSelectOrAsk = queryType === "SELECT" || queryType === "ASK";
+  const supported = isSelectOrAsk
+    ? SUPPORTED_SELECT_FORMATS
+    : SUPPORTED_CONSTRUCT_FORMATS;
+
+  let selectedFormat = "";
   for (const accepted of acceptedTypes) {
     if (accepted.type === "*/*") {
-      for (const type of availableMediaTypes) {
-        try {
-          const { data } = await engine.resultToString(result, type);
-          return [await text(data), type] as const;
-        } catch {}
-      }
-    } else if (availableMediaTypes.includes(accepted.type)) {
-      try {
-        const { data } = await engine.resultToString(result, accepted.type);
-        return [await text(data), accepted.type] as const;
-      } catch {}
+      selectedFormat = supported[0];
+      break;
+    }
+    if (supported.includes(accepted.type)) {
+      selectedFormat = accepted.type;
+      break;
     }
   }
 
-  const actualAvailableMediaTypes: string[] = [];
-
-  for (const type of availableMediaTypes) {
-    try {
-      await engine.resultToString(result, type);
-      actualAvailableMediaTypes.push(type);
-    } catch {}
-  }
-
-  throw new Error(
-    `No acceptable media type found. Available: ${actualAvailableMediaTypes.join(", ")}`,
-  );
+  selectedFormat = selectedFormat || supported[0];
+  const result = store.query(query, { results_format: selectedFormat });
+  return [result, selectedFormat] as [string, string];
 };
 
-export const GET: APIRoute = async ({ request, locals }) => {
+export const GET: APIRoute = async ({ request, locals, redirect }) => {
   const url = new URL(request.url);
   const query = url.searchParams.get("query") || "";
   const accept = request.headers.get("Accept") || "";
   const acceptedTypes = parseAccept(accept);
+  if (!query && acceptedTypes.some((at) => at.type === "text/html")) {
+    return redirect("/sparql-playground");
+  }
 
   try {
-    const internalFetch = locals.runtime.env.SELF.fetch.bind(locals.runtime.env.SELF);
+    const internalFetch = createFetch(locals.runtime.env);
 
     const [data, mediaType] = await executeQuery(
       query,
@@ -105,8 +145,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const accept = request.headers.get("Accept") || "";
   const acceptedTypes = parseAccept(accept);
   try {
-    const internalFetch = locals.runtime.env.SELF.fetch.bind(locals.runtime.env.SELF);
-
+    const internalFetch = createFetch(locals.runtime.env);
     const [data, mediaType] = await executeQuery(
       query,
       internalFetch,
