@@ -1,28 +1,32 @@
 import type { APIRoute } from "astro";
-import { organizationMap } from "@/data";
+import { spatialMap } from "@/data";
 import { toFullURL } from "@/utils/url";
 
 export const prerender = true;
 
-const allOrganizations = Array.from(organizationMap.values());
+const allSpatialEntities = Array.from(spatialMap.values());
 
 export const allJSONLD = {
   "@context": [
-    toFullURL("/schema/organization.context.jsonld"),
+    toFullURL("/schema/spatial.context.jsonld"),
     {
-      items: {
+      type: {
+        "@id": "type",
+      },
+      features: {
         "@id": "hydra:member",
         "@container": "@set",
       },
     },
   ],
-  "@id": toFullURL("/resources/organizations/all"),
+  "@id": toFullURL("/resources/spatial/all"),
   "@type": ["void:Dataset", "hydra:Collection"],
-  "void:title": "UEC Atlas - All Organizations",
+  type: "FeatureCollection",
+  "void:title": "UEC Atlas - All Spatial Data",
   "void:license": "https://creativecommons.org/by/4.0/",
   "void:sparqlEndpoint": toFullURL("/sparql"),
-  "hydra:totalItems": allOrganizations.length,
-  items: allOrganizations,
+  "hydra:totalItems": allSpatialEntities.length,
+  features: allSpatialEntities,
 };
 
 export const GET: APIRoute = async () => {
@@ -31,8 +35,8 @@ export const GET: APIRoute = async () => {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/ld+json",
       Link: [
-        `<${toFullURL("/schema/organization.context.jsonld")}>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`,
-        `<${toFullURL(`/ontology/organization.ttl`)}>; rel="describedby"; type="text/turtle"`,
+        `<${toFullURL("/schema/spatial.context.jsonld")}>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`,
+        `<${toFullURL(`/ontology/spatial.ttl`)}>; rel="describedby"; type="text/turtle"`,
       ].join(", "),
     },
   });

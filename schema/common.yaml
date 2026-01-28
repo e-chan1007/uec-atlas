@@ -8,6 +8,7 @@ prefixes:
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   xsd: http://www.w3.org/2001/XMLSchema#
+  geo: http://www.opengis.net/ont/geosparql#
   hydra: http://www.w3.org/ns/hydra/core#
   void: http://rdfs.org/ns/void#
   schema: http://schema.org/
@@ -37,11 +38,15 @@ classes:
     class_uri: linkml:Any
   NamedThing:
     abstract: true
+    slots:
+      - name
+      - alternateName
+  NamedThingWithId:
+    is_a: NamedThing
     id_prefixes:
       - uatr
     slots:
       - id
-      - name
   PostalAddress:
     class_uri: schema:PostalAddress
     attributes:
@@ -65,6 +70,12 @@ classes:
         description: "国"
         slot_uri: schema:addressCountry
         range: string
+  OrganizationBase:
+    is_a: NamedThingWithId
+    class_uri: schema:Organization
+  SpatialPropertiesBase:
+    is_a: NamedThingWithId
+    class_uri: geo:Feature
 
 slots:
   id:
@@ -74,7 +85,7 @@ slots:
   type:
     required: true
     slot_uri: rdf:type
-    range: uriorcurie
+    range: string
     annotations:
       jsonld_id: "@type"
   name:
@@ -86,6 +97,34 @@ slots:
     multivalued: true
     annotations:
       jsonld_container: "@language"
+  alternateName:
+    description: "別名・略称・ネーミングライツ名など"
+    slot_uri: schema:alternateName
+    range: I18NString
+    inlined: true
+    multivalued: true
+    annotations:
+      jsonld_container: "@language"
   description:
     slot_uri: schema:description
     range: string
+  address:
+    description: "所在地"
+    slot_uri: schema:address
+    range: PostalAddress
+    inlined: true
+
+  managedBy:
+    description: "管理・運用責任を持つ組織"
+    slot_uri: schema:managedBy
+    domain: SpatialPropertiesBase
+    range: OrganizationBase
+    multivalued: true
+    inverse: manages
+  manages:
+    description: "管理・運用責任を持つ空間や施設"
+    slot_uri: schema:manages
+    domain: OrganizationBase
+    range: SpatialPropertiesBase
+    multivalued: true
+    inverse: managedBy

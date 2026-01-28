@@ -1,0 +1,150 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "uatr:spatial/WEST",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              139.535,
+              35.655
+            ],
+            [
+              139.538,
+              35.655
+            ],
+            [
+              139.538,
+              35.658
+            ],
+            [
+              139.535,
+              35.658
+            ],
+            [
+              139.535,
+              35.655
+            ]
+          ]
+        ]
+      },
+      "geo:hasGeometry": {
+        "geo:asWKT": "POLYGON((139.535 35.655, 139.538 35.655, 139.538 35.658, 139.535 35.658, 139.535 35.655))"
+      },
+      "properties": {
+        "type": "Building",
+        "name": {
+          "ja": "西1号館(仮)",
+          "en": "West Building No. 1"
+        },
+        "minFloorLevel": -1,
+        "maxFloorLevel": 4
+      }
+    },
+    {
+      "id": "uatr:spatial/WEST_2F",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "type": "Storey",
+        "name": {
+          "ja": "西1号館 2階(仮)",
+          "en": "West Building No. 1 2F"
+        },
+        "floorLevel": "2",
+        "containedInPlace": "uatr:spatial/WEST"
+      }
+    },
+    {
+      "id": "uatr:spatial/WEST_201",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              139.536,
+              35.656
+            ],
+            [
+              139.5365,
+              35.656
+            ],
+            [
+              139.5365,
+              35.6565
+            ],
+            [
+              139.536,
+              35.6565
+            ],
+            [
+              139.536,
+              35.656
+            ]
+          ]
+        ]
+      },
+      "geo:hasGeometry": {
+        "geo:asWKT": "POLYGON((139.536 35.656, 139.5365 35.656, 139.5365 35.6565, 139.536 35.6565, 139.536 35.656))"
+      },
+      "properties": {
+        "type": "Classroom",
+        "name": {
+          "ja": "W1-201(仮)",
+          "en": "W1-201"
+        },
+        "capacity": 120,
+        "containedInPlace": "uatr:spatial/WEST_2F"
+      }
+    },
+    {
+      "id": "uatr:spatial/WEST_RESTROOM_2F",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              139.537,
+              35.656
+            ],
+            [
+              139.5372,
+              35.656
+            ],
+            [
+              139.5372,
+              35.6562
+            ],
+            [
+              139.537,
+              35.6562
+            ],
+            [
+              139.537,
+              35.656
+            ]
+          ]
+        ]
+      },
+      "geo:hasGeometry": {
+        "geo:asWKT": "POLYGON((139.537 35.656, 139.5372 35.656, 139.5372 35.6562, 139.537 35.6562, 139.537 35.656))"
+      },
+      "properties": {
+        "type": "Restroom",
+        "name": {
+          "ja": "西1号館 2階 トイレ(仮)",
+          "en": "West Building No. 1 2F Restroom"
+        },
+        "genderCategory": "Unisex",
+        "isAccessible": true,
+        "hasBabyChanging": true,
+        "containedInPlace": "uatr:spatial/WEST_2F"
+      }
+    }
+  ]
+}

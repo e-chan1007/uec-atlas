@@ -5,6 +5,12 @@
         "data/organizations/**/*.json"
       ],
       "url": "./generated/organization.schema.json"
+    },
+    {
+      "fileMatch": [
+        "data/spatial/**/*.geojson"
+      ],
+      "url": "./generated/spatial.schema.json"
     }
   ],
   "yaml.schemas": {

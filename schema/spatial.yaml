@@ -1,0 +1,309 @@
+id: uats:spatial
+name: uec_atlas_spatial
+title: "UEC Atlas Spatial and Building Ontology"
+
+prefixes:
+  uato: https://uec-atlas.e-chan1007.workers.dev/ontology/
+  uatr: https://uec-atlas.e-chan1007.workers.dev/resources/
+  uats: https://uec-atlas.e-chan1007.workers.dev/schema/
+  bot: https://w3id.org/bot#
+  geo: http://www.opengis.net/ont/geosparql#
+  hydra: http://www.w3.org/ns/hydra/core#
+  void: http://rdfs.org/ns/void#
+  schema: http://schema.org/
+  linkml: https://w3id.org/linkml/
+
+imports:
+  - common
+
+default_prefix: uato
+
+enums:
+  PassageType:
+    description: "移動空間の種類"
+    permissible_values:
+      corridor:
+        description: "廊下"
+      stairs:
+        description: "階段"
+      elevator:
+        description: "エレベーター"
+
+classes:
+  SpatialEntity:
+    class_uri: geo:Feature
+    slots:
+      - id
+      - geometry
+      - hasGeometry
+      - properties
+    attributes:
+      type:
+        designates_type: true
+        range: string
+        equals_string: "Feature"
+
+  GeometryObject:
+    class_uri: geo:Geometry
+    slots:
+      - asWKT
+
+  SpatialProperties:
+    is_a: SpatialPropertiesBase
+    class_uri: bot:Zone
+    slots:
+      - containedInPlace
+      - containsPlace
+      - isPartOf
+      - hasPart
+      - intersectsPlace
+      - connectedTo
+      - managedBy
+    attributes:
+      type:
+        designates_type: true
+        range: string
+
+  SiteFeature:
+    is_a: SpatialEntity
+    class_uri: schema:Place
+    slot_usage:
+      geometry: { required: false }
+      properties: { range: Site }
+
+  Site:
+    is_a: SpatialProperties
+    class_uri: schema:Place
+    description: "キャンパス全体"
+
+  AreaFeature:
+    is_a: SpatialEntity
+    class_uri: bot:Zone
+    slot_usage:
+      properties: { range: Area }
+
+  Area:
+    is_a: SpatialProperties
+    class_uri: uato:Area
+    description: "地区(東地区、西地区など)"
+
+  RoadFeature:
+    is_a: SpatialEntity
+    class_uri: schema:Road
+    slot_usage:
+      properties: { range: Road }
+
+  Road:
+    is_a: SpatialProperties
+    class_uri: schema:Road
+    description: "キャンパス内の道路・通路"
+
+  Entrance:
+    abstract: true
+    is_a: SpatialProperties
+    class_uri: schema:Entrance
+    slot_usage:
+      connectedTo: { required: true }
+
+  GateFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Gate
+    slot_usage:
+      properties: { range: Gate }
+
+  Gate:
+    is_a: Entrance
+    description: "地区の入口（門）"
+
+  BuildingFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Building
+    slot_usage:
+      properties: { range: Building }
+
+  Building:
+    is_a: SpatialProperties
+    class_uri: uato:Building
+    description: "建物全体"
+    exact_mappings:
+      - bot:Building
+    attributes:
+      minFloorLevel:
+        range: integer
+      maxFloorLevel:
+        range: integer
+
+  BuildingEntranceFeature:
+    is_a: SpatialEntity
+    class_uri: uato:BuildingEntrance
+    slot_usage:
+      properties: { range: BuildingEntrance }
+
+  BuildingEntrance:
+    is_a: Entrance
+    description: "建物の入口"
+
+  BridgeFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Bridge
+    slot_usage:
+      properties: { range: Bridge }
+
+  Bridge:
+    is_a: SpatialProperties
+    class_uri: uato:Bridge
+    description: "建物間を連絡する渡り廊下"
+    slot_usage:
+      connectedTo: { required: true }
+
+  StoreyFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Storey
+    slot_usage:
+      geometry:
+        required: false
+      properties: { range: Storey }
+
+  Storey:
+    is_a: SpatialProperties
+    class_uri: uato:Storey
+    description: "建物内の階層"
+    exact_mappings:
+      - bot:Storey
+    attributes:
+      floorLevel:
+        slot_uri: schema:floorLevel
+        range: string
+        required: true
+
+  RoomFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Room
+    slot_usage:
+      properties: { range: Room }
+
+  Room:
+    is_a: SpatialProperties
+    class_uri: uato:Room
+    exact_mappings:
+      - bot:Space
+    description: "室内空間"
+
+  PassageFeature:
+    is_a: SpatialEntity
+    class_uri: uato:Passage
+    slot_usage:
+      properties: { range: Passage }
+
+  Passage:
+    is_a: SpatialProperties
+    class_uri: uato:Passage
+    description: "廊下・通路・階段・エレベーターなどの移動空間"
+    attributes:
+      type:
+        slot_uri: rdf:type
+        description: "移動空間の種類"
+        range: PassageType
+        required: true
+
+  ClassroomFeature:
+    is_a: RoomFeature
+    class_uri: uato:Classroom
+    slot_usage:
+      properties: { range: Classroom }
+
+  Classroom:
+    is_a: Room
+    class_uri: uato:Classroom
+    description: "講義室"
+    attributes:
+      capacity:
+        range: integer
+        required: true
+
+  RestroomFeature:
+    is_a: RoomFeature
+    class_uri: uato:Restroom
+    slot_usage:
+      properties: { range: Restroom }
+
+  Restroom:
+    is_a: Room
+    class_uri: schema:Restroom
+    description: "トイレ"
+    attributes:
+      genderCategory:
+        range: string
+      isAccessible:
+        range: boolean
+      hasBabyChanging:
+        range: boolean
+
+  FeatureCollection:
+    tree_root: true
+    attributes:
+      type:
+        slot_uri: rdf:type
+        range: string
+        equals_string: "FeatureCollection"
+      features:
+        range: SpatialEntity
+        multivalued: true
+        inlined_as_list: true
+
+slots:
+  hasGeometry:
+    alias: "geo:hasGeometry"
+    slot_uri: geo:hasGeometry
+    range: GeometryObject
+
+  asWKT:
+    alias: "geo:asWKT"
+    slot_uri: geo:asWKT
+    range: string
+
+  geometry:
+    range: Any
+
+  properties:
+    range: SpatialProperties
+    required: true
+    inlined: true
+    annotations:
+      jsonld_id: "@nest"
+
+  features:
+    range: SpatialEntity
+    multivalued: true
+    inlined_as_list: true
+
+  connectedTo:
+    description: "接続する地物(渡り廊下など)"
+    range: SpatialEntity
+    multivalued: true
+  containedInPlace:
+    description: "上位地物"
+    slot_uri: schema:containedInPlace
+    range: SpatialEntity
+  containsPlace:
+    description: "下位地物"
+    slot_uri: schema:containsPlace
+    range: SpatialEntity
+    multivalued: true
+    inlined: false
+  isPartOf:
+    description: "上位地物(論理的な包含関係)"
+    slot_uri: schema:isPartOf
+    range: SpatialEntity
+    multivalued: true
+  hasPart:
+    description: "下位地物(論理的な包含関係)"
+    slot_uri: schema:hasPart
+    range: SpatialEntity
+    multivalued: true
+    inlined: false
+  intersectsPlace:
+    description: "交差する地物(吹き抜けや階段の2階層目以降など)"
+    slot_uri: bot:intersectsZone
+    range: SpatialEntity
+    multivalued: true

@@ -1,8 +1,10 @@
 import type { APIRoute } from "astro";
+import { organizationMap } from "@/data";
 import { toFullURL } from "@/utils/url";
-import { allData } from "./all";
 
 export const prerender = true;
+
+const allOrganizations = Array.from(organizationMap.values());
 
 export const GET: APIRoute = async () => {
   const response = {
@@ -15,8 +17,8 @@ export const GET: APIRoute = async () => {
     "void:dataDump": {
       "@id": toFullURL("/resources/organizations/all"),
     },
-    "hydra:totalItems": allData.length,
-    "hydra:member": allData.map((organization) => ({
+    "hydra:totalItems": allOrganizations.length,
+    "hydra:member": allOrganizations.map((organization) => ({
       "@id": organization.id,
       "@type": organization.type,
     })),

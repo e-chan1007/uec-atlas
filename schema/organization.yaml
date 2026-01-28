@@ -6,6 +6,7 @@ prefixes:
   uato: https://uec-atlas.e-chan1007.workers.dev/ontology/
   uatr: https://uec-atlas.e-chan1007.workers.dev/resources/
   uats: https://uec-atlas.e-chan1007.workers.dev/schema/
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   org: http://www.w3.org/ns/org#
   schema: http://schema.org/
   hydra: http://www.w3.org/ns/hydra/core#
@@ -19,7 +20,8 @@ default_prefix: uato
 
 classes:
   Organization:
-    is_a: NamedThing
+    class_uri: schema:Organization
+    is_a: OrganizationBase
     exact_mappings:
       - org:Organization
     description: "組織"
@@ -28,6 +30,7 @@ classes:
       - hasSubOrganization
       - subOrganizationOf
       - relatedTo
+      - manages
     attributes:
       type:
         description: "組織の種類"
@@ -94,6 +97,8 @@ classes:
     description: "教育の進路を示す関係性"
 
 slots:
+  target:
+    range: Organization
   hasSubOrganization:
     description: "下位組織"
     slot_uri: org:hasSubOrganization
@@ -124,8 +129,3 @@ slots:
     multivalued: true
     annotations:
       jsonld_container: "@set"
-  address:
-    description: "大学の所在地"
-    slot_uri: schema:address
-    range: PostalAddress
-    inlined: true

@@ -29,11 +29,22 @@ async function getStore(runtimeFetch: typeof fetch) {
   await initOxigraph();
   if (cachedStore) return cachedStore;
 
-  const res = await runtimeFetch(toFullURL("/data/organizations/all.nq"));
-  const nquads = await res.text();
+  const nQuadURLs = [
+    toFullURL("/data/organizations/all.nq"),
+    toFullURL("/data/spatial/all.nq"),
+  ];
+  const nquadsList = await Promise.all(
+    nQuadURLs.map(async (url) => {
+      const res = await runtimeFetch(url);
+      return res.text();
+    }),
+  );
 
   const store = new Store();
-  store.load(nquads, { format: "application/n-quads" });
+  for (const nquads of nquadsList) {
+    console.log("loading nquads...");
+    store.load(nquads, { format: "application/n-quads" });
+  }
 
   cachedStore = store;
   return store;

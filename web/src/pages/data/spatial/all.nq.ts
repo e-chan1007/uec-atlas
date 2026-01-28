@@ -1,23 +1,29 @@
 import type { APIRoute } from "astro";
-import type { JsonLdDocument } from "jsonld";
-import { getOntology } from "@/pages/ontology/[path].ttl";
 import { resolveContext } from "@/pages/schema/[id].context.jsonld";
-import { jsonLdToNQuads } from "@/utils/n-quads";
 import { allJSONLD } from "./all";
+import { getOntology } from "@/pages/ontology/[path].ttl";
+import { jsonLdToNQuads } from "@/utils/n-quads";
 
 export const prerender = true;
 
-const ontology = await getOntology("organization");
+const ontology = await getOntology("spatial");
 if (!ontology) throw new Error("Ontology not found");
 
 const jsonLd = await resolveContext(allJSONLD);
-const allOrganizationsNQuads = await jsonLdToNQuads(
+const jsonLdWithoutGeometries = {
+  ...jsonLd,
+  features: jsonLd.features.map((item) => ({
+    ...item,
+    geometry: undefined,
+  })),
+};
+const allSpatialNQuads = await jsonLdToNQuads(
   ontology,
-  jsonLd as JsonLdDocument,
+  jsonLdWithoutGeometries,
 );
 
 export const GET: APIRoute = async () => {
-  return new Response(allOrganizationsNQuads, {
+  return new Response(allSpatialNQuads, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Content-Type": "application/n-quads; charset=utf-8",

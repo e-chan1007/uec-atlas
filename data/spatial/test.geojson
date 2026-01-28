@@ -1,0 +1,108 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "uatr:spatial/MAIN",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              139.54,
+              35.65
+            ],
+            [
+              139.55,
+              35.65
+            ],
+            [
+              139.55,
+              35.66
+            ],
+            [
+              139.54,
+              35.66
+            ],
+            [
+              139.54,
+              35.65
+            ]
+          ]
+        ]
+      },
+      "geo:hasGeometry": {
+        "geo:asWKT": "POLYGON((139.54 35.65, 139.55 35.65, 139.55 35.66, 139.54 35.66, 139.54 35.65))"
+      },
+      "properties": {
+        "type": "Building",
+        "name": {
+          "ja": "本館(仮)",
+          "en": "Main Building"
+        },
+        "minFloorLevel": -1,
+        "maxFloorLevel": 4,
+        "managedBy": [
+          "uatr:organizations/UEC"
+        ]
+      }
+    },
+    {
+      "id": "uatr:spatial/MAIN_1F",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "type": "Storey",
+        "name": {
+          "ja": "本館 1階(仮)",
+          "en": "Main Building 1F"
+        },
+        "floorLevel": "1",
+        "containedInPlace": "uatr:spatial/MAIN"
+      }
+    },
+    {
+      "id": "uatr:spatial/MAIN_101",
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              139.541,
+              35.651
+            ],
+            [
+              139.542,
+              35.651
+            ],
+            [
+              139.542,
+              35.652
+            ],
+            [
+              139.541,
+              35.652
+            ],
+            [
+              139.541,
+              35.651
+            ]
+          ]
+        ]
+      },
+      "geo:hasGeometry": {
+        "geo:asWKT": "POLYGON((139.541 35.651, 139.542 35.651, 139.542 35.652, 139.541 35.652, 139.541 35.651))"
+      },
+      "properties": {
+        "type": "Classroom",
+        "name": {
+          "ja": "101号講義室(仮)",
+          "en": "Lecture Room 101"
+        },
+        "capacity": 150,
+        "containedInPlace": "uatr:spatial/MAIN_1F"
+      }
+    }
+  ]
+}

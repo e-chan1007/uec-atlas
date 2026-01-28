@@ -19,7 +19,7 @@ export const getOntology = async (path?: string) => {
     key.endsWith(`${path}.ttl`),
   );
   return file ? file[1] : null;
-}
+};
 
 export const GET: APIRoute = async ({ params }) => {
   const path = params.path;

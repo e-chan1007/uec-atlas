@@ -48,7 +48,7 @@ $(GEN_DIR)/%.schema.json: $(SCHEMA_DIR)/%.yaml
 # schema/*.yaml -> generated/*.ttl
 $(GEN_DIR)/%.ttl: $(SCHEMA_DIR)/%.yaml
 	@mkdir -p $(GEN_DIR)
-	gen-owl $< > $@
+	gen-owl --no-use-native-uris $< > $@
 
 # schema/*.yaml -> web/generated/*.ts
 $(TS_GEN_DIR)/%.ts: $(SCHEMA_DIR)/%.yaml
