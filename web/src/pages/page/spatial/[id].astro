@@ -47,12 +47,12 @@ const breadcrumbItems = [
     icon: "mdi:map",
   },
   ...ancestors.map((ancestor) => ({
-    tag: ancestor.type,
+    tag: ancestor.properties.type,
     label: formatLangString(ancestor.properties.name),
     href: expandURI(ancestor.id),
   })),
   {
-    tag: spatial.type,
+    tag: spatial.properties.type,
     label: formatLangString(spatial.properties.name),
   },
 ];
@@ -96,7 +96,7 @@ const breadcrumbItems = [
                       )}
                     </span>
                     <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                      {subSpatial.type}
+                      {subSpatial.properties.type}
                     </span>
                   </h3>
                   <p class="text-xs text-base-content/70">
@@ -117,14 +117,18 @@ const breadcrumbItems = [
   }
 
   <Heading2>プレビュー</Heading2>
-  <div
-    class="w-full h-96 border border-base-300 rounded-md overflow-hidden mb-4"
-  >
-    <SpatialPreviewMap
-      style="width: 100%; height: 100%;"
-      feature={spatialJsonLD as unknown as GeoJSON.Feature}
-    />
-  </div>
+  {
+    spatialJsonLD.geometry ? (
+      <div class="w-full h-96 border border-base-300 rounded-md overflow-hidden mb-4">
+        <SpatialPreviewMap
+          style="width: 100%; height: 100%;"
+          feature={spatialJsonLD as unknown as GeoJSON.Feature}
+        />
+      </div>
+    ) : (
+      <p class="mb-4">ジオメトリ情報が存在しないため、地図を表示できません。</p>
+    )
+  }
 
   <Heading2>JSON-LD</Heading2>
 

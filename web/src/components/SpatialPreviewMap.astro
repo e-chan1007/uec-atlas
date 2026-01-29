@@ -28,7 +28,14 @@ interface Props extends HTMLAttributes<"div"> {
       this.style.height = "100%";
 
       const geoJSONFeature = JSON.parse(this.dataset.feature || "{}");
-      const featureBbox = bbox(geoJSONFeature);
+      let featureBbox: number[] | undefined;
+      if (geoJSONFeature.type === "FeatureCollection") {
+        featureBbox = bbox(
+          geoJSONFeature.features.find((f: GeoJSON.Feature) => f.geometry),
+        );
+      } else {
+        featureBbox = bbox(geoJSONFeature);
+      }
 
       this.map = new maplibregl.Map({
         container: this,

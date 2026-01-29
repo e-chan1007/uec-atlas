@@ -66,6 +66,7 @@ classes:
         description: "郵便番号"
         slot_uri: schema:postalCode
         range: string
+        multivalued: true
       addressCountry:
         description: "国"
         slot_uri: schema:addressCountry
@@ -74,7 +75,7 @@ classes:
     is_a: NamedThingWithId
     class_uri: schema:Organization
   SpatialPropertiesBase:
-    is_a: NamedThingWithId
+    is_a: NamedThing
     class_uri: geo:Feature
 
 slots:
@@ -89,6 +90,7 @@ slots:
     annotations:
       jsonld_id: "@type"
   name:
+    description: "名称"
     slot_uri: schema:name
     exact_mappings:
       - rdfs:label
@@ -103,9 +105,8 @@ slots:
     range: I18NString
     inlined: true
     multivalued: true
-    annotations:
-      jsonld_container: "@language"
   description:
+    description: "説明"
     slot_uri: schema:description
     range: string
   address:

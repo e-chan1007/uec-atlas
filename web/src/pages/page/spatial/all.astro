@@ -3,6 +3,7 @@ import CardBreadcrumb from "@/components/CardBreadcrumb.astro";
 import Heading1 from "@/components/Heading1.astro";
 import Heading2 from "@/components/Heading2.astro";
 import JSONLDPreview from "@/components/JSONLDPreview.astro";
+import SpatialPreviewMap from "@/components/SpatialPreviewMap.astro";
 import Layout from "@/layouts/Layout.astro";
 import { allJSONLD } from "@/pages/data/spatial/all";
 import { formatLangString } from "@/utils/rdf";
@@ -68,6 +69,15 @@ const breadcrumbItems = [
       ))
     }
   </ul>
+
+  <div
+    class="my-8 h-96 w-full border border-base-300 rounded-md overflow-hidden"
+  >
+    <SpatialPreviewMap
+      style="width: 100%; height: 100%;"
+      feature={allJSONLD as unknown as GeoJSON.Feature}
+    />
+  </div>
 
   <Heading2>JSON-LD</Heading2>
 

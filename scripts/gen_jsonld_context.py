@@ -26,9 +26,16 @@ def main():
             cls = schema.classes[slot.range]
             if "jsonld_container" in cls.annotations:
                 container = str(cls.annotations["jsonld_container"].value)
+        elif slot.range in schema.types:
+            typ = schema.types[slot.range]
+            if "jsonld_container" in typ.annotations:
+                container = str(typ.annotations["jsonld_container"].value)
 
         if "jsonld_container" in slot.annotations:
             container = str(slot.annotations["jsonld_container"].value)
+
+        if container == "@language" and slot.multivalued:
+            container = ["@set", "@language"]
 
         if container:
             slot_containers[slot_name] = container

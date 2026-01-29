@@ -3,7 +3,6 @@ import { resolveContext } from "@/pages/schema/[id].context.jsonld";
 import { allJSONLD } from "./all";
 import { getOntology } from "@/pages/ontology/[path].ttl";
 import { jsonLdToNQuads } from "@/utils/n-quads";
-import {  geoJSONToWkt } from "betterknown";
 
 export const prerender = true;
 
@@ -15,10 +14,7 @@ const jsonLdWithoutGeometries = {
   ...jsonLd,
   features: jsonLd.features.map((item) => ({
     ...item,
-    geometry: undefined,
-    hasGeometry: {
-      asWKT: item.geometry ? geoJSONToWkt(item.geometry as GeoJSON.Geometry) : undefined,
-    }
+    geometry: undefined
   })),
 };
 const allSpatialNQuads = await jsonLdToNQuads(

@@ -27,6 +27,7 @@ classes:
     description: "組織"
     tree_root: true
     slots:
+      - legalName
       - hasSubOrganization
       - subOrganizationOf
       - relatedTo
@@ -51,13 +52,9 @@ classes:
     is_a: Organization
     class_uri: schema:CollegeOrUniversity
     description: "大学"
-    slots:
-      - address
     slot_usage:
       id:
         pattern: "^uatr:organizations/UEC$"
-      address:
-        required: true
 
   School:
     is_a: AbstractEducationalOrganization
@@ -106,6 +103,7 @@ slots:
     range: Organization
     inlined: true
     inlined_as_list: true
+    transitive: true
     inverse: subOrganizationOf
     multivalued: true
     annotations:
@@ -115,6 +113,7 @@ slots:
     slot_uri: org:subOrganizationOf
     domain: Organization
     range: Organization
+    transitive: true
     inverse: hasSubOrganization
     multivalued: true
     inlined: false
@@ -129,3 +128,11 @@ slots:
     multivalued: true
     annotations:
       jsonld_container: "@set"
+  legalName:
+    description: "正式な法人名"
+    slot_uri: schema:legalName
+    range: I18NString
+    multivalued: true
+    inlined: true
+    annotations:
+      jsonld_container: "@language"

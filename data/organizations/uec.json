@@ -1,0 +1,12 @@
+{
+  "id": "uatr:organizations/UEC",
+  "type": "University",
+  "name": {
+    "en": "The University of Electro-Communications",
+    "ja": "電気通信大学"
+  },
+  "legalName": {
+    "en": "The University of Electro-Communications",
+    "ja": "国立大学法人電気通信大学"
+  }
+}

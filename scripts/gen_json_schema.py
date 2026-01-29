@@ -45,11 +45,23 @@ def main():
                 container = target.annotations["jsonld_container"].value
 
             if container == "@language":
-                properties[slot_name] = {
-                    "type": "object",
-                    "additionalProperties": {"type": "string"},
-                    "description": target.description or "",
-                }
+                if target.multivalued:
+                    properties[slot_name] = {
+                        "type": "object",
+                        "additionalProperties": {
+                            "oneOf": [
+                                {"type": "string"},
+                                {"type": "array", "items": {"type": "string"}},
+                            ]
+                        },
+                        "description": target.description or "",
+                    }
+                else:
+                    properties[slot_name] = {
+                        "type": "object",
+                        "additionalProperties": {"type": "string"},
+                        "description": target.description or "",
+                    }
                 continue
 
             # 2. Handle designates_type enum resolution

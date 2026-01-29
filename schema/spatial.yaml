@@ -51,6 +51,7 @@ classes:
     is_a: SpatialPropertiesBase
     class_uri: bot:Zone
     slots:
+      - address
       - containedInPlace
       - containsPlace
       - isPartOf
@@ -59,6 +60,10 @@ classes:
       - connectedTo
       - managedBy
       - type
+    slot_usage:
+      type:
+        designates_type: true
+        range: uriorcurie
 
   SiteFeature:
     is_a: SpatialEntity
@@ -281,22 +286,34 @@ slots:
   containedInPlace:
     description: "上位地物"
     slot_uri: schema:containedInPlace
+    transitive: true
+    inverse: containsPlace
+    domain: SpatialEntity
     range: SpatialEntity
   containsPlace:
     description: "下位地物"
     slot_uri: schema:containsPlace
+    transitive: true
+    domain: SpatialEntity
     range: SpatialEntity
+    inverse: containedInPlace
     multivalued: true
     inlined: false
   isPartOf:
     description: "上位地物(論理的な包含関係)"
     slot_uri: schema:isPartOf
+    transitive: true
+    domain: SpatialEntity
     range: SpatialEntity
+    inverse: hasPart
     multivalued: true
   hasPart:
     description: "下位地物(論理的な包含関係)"
     slot_uri: schema:hasPart
+    transitive: true
+    domain: SpatialEntity
     range: SpatialEntity
+    inverse: isPartOf
     multivalued: true
     inlined: false
   intersectsPlace:
