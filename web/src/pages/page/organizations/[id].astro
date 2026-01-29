@@ -245,7 +245,10 @@ const reverseRelations = getReverseRelation(currentId);
     </a>
   </div>
 
-  <JSONLDPreview code={JSON.stringify(organizationJsonLD, null, 2)} />
+  <JSONLDPreview
+    code={JSON.stringify(organizationJsonLD, null, 2)}
+    ontology="organization"
+  />
 </Layout>
 
 <script>

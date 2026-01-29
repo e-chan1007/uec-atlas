@@ -1,6 +1,6 @@
-import { toFullURL } from "@/utils/url";
 import type { APIRoute } from "astro";
-import { getContext, resolveContext } from "./[id].context.jsonld";
+import { toFullURL } from "@/utils/url";
+import { resolveContext } from "./[id].context.jsonld";
 
 export const prerender = true;
 
@@ -16,7 +16,7 @@ export const getStaticPaths = async () => {
   }));
 };
 
-export const getFrame = async(id?: string, expandContext?: boolean) => {
+export const getFrame = async (id?: string, expandContext?: boolean) => {
   const file = Object.entries(files).find(([key, _value]) =>
     key.endsWith(`${id}.frame.jsonld`),
   );
@@ -34,10 +34,10 @@ export const getFrame = async(id?: string, expandContext?: boolean) => {
       return contextItem;
     });
   }
-  if(expandContext) return await resolveContext(frame);
+  if (expandContext) return await resolveContext(frame);
 
   return frame;
-}
+};
 
 export const GET: APIRoute = async ({ params }) => {
   const id = params.id;

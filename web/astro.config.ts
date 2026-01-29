@@ -15,6 +15,11 @@ export default defineConfig({
   integrations: [icon()],
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      esbuildOptions: {
+        target: "esnext",
+      },
+    },
     ssr: {
       external: ["eyereasoner"],
     },

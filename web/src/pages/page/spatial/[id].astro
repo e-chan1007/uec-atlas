@@ -3,6 +3,7 @@ import CardBreadcrumb from "@/components/CardBreadcrumb.astro";
 import Heading1 from "@/components/Heading1.astro";
 import Heading2 from "@/components/Heading2.astro";
 import JSONLDPreview from "@/components/JSONLDPreview.astro";
+import SpatialPreviewMap from "@/components/SpatialPreviewMap.astro";
 import { linkedSpatialMap, spatialMap } from "@/data";
 import { type LinkedSpatialEntity } from "@/data/spatial";
 import Layout from "@/layouts/Layout.astro";
@@ -115,6 +116,16 @@ const breadcrumbItems = [
     )
   }
 
+  <Heading2>プレビュー</Heading2>
+  <div
+    class="w-full h-96 border border-base-300 rounded-md overflow-hidden mb-4"
+  >
+    <SpatialPreviewMap
+      style="width: 100%; height: 100%;"
+      feature={spatialJsonLD as unknown as GeoJSON.Feature}
+    />
+  </div>
+
   <Heading2>JSON-LD</Heading2>
 
   <div class="d-join w-full mb-2">
@@ -131,7 +142,10 @@ const breadcrumbItems = [
     </a>
   </div>
 
-  <JSONLDPreview code={JSON.stringify(spatialJsonLD, null, 2)} />
+  <JSONLDPreview
+    code={JSON.stringify(spatialJsonLD, null, 2)}
+    ontology="spatial"
+  />
 </Layout>
 
 <script>

@@ -1,0 +1,79 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import "maplibre-gl/dist/maplibre-gl.css";
+
+interface Props extends HTMLAttributes<"div"> {
+  feature: GeoJSON.Feature;
+}
+---
+
+<maplibre-map
+  data-feature={JSON.stringify(Astro.props.feature)}
+  {...Astro.props}></maplibre-map>
+
+<script>
+  import maplibregl from "maplibre-gl";
+  import { bbox } from "@turf/turf";
+
+  class MaplibreMap extends HTMLElement {
+    declare private map: maplibregl.Map | null;
+    constructor() {
+      super();
+      this.map = null;
+    }
+
+    connectedCallback() {
+      this.style.display = "block";
+      this.style.width = "100%";
+      this.style.height = "100%";
+
+      const geoJSONFeature = JSON.parse(this.dataset.feature || "{}");
+      const featureBbox = bbox(geoJSONFeature);
+
+      this.map = new maplibregl.Map({
+        container: this,
+        style: "https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json",
+        bounds: featureBbox as maplibregl.LngLatBoundsLike,
+        fitBoundsOptions: { padding: 50 },
+      });
+
+      this.map.addControl(new maplibregl.NavigationControl());
+
+      this.map.on("load", () => {
+        if (!this.map) return;
+        this.map.addSource("spatial-preview", {
+          type: "geojson",
+          data: geoJSONFeature,
+        });
+
+        this.map.addLayer({
+          id: "spatial-preview-fill",
+          type: "fill",
+          source: "spatial-preview",
+          paint: {
+            "fill-color": "#ff0000",
+            "fill-opacity": 0.5,
+          },
+        });
+
+        this.map.addLayer({
+          id: "spatial-preview-outline",
+          type: "line",
+          source: "spatial-preview",
+          paint: {
+            "line-color": "#000000",
+            "line-width": 2,
+          },
+        });
+      });
+    }
+
+    disconnectedCallback() {
+      if (this.map) {
+        this.map.remove();
+      }
+    }
+  }
+
+  customElements.define("maplibre-map", MaplibreMap);
+</script>

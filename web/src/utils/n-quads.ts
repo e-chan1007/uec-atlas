@@ -2,10 +2,13 @@ import { n3reasoner } from "eyereasoner";
 import type { PostalAddress } from "generated/organization";
 import jsonld from "jsonld";
 import {
+  type BlankNode,
   blankNode,
   defaultGraph,
   initOxigraph,
+  type Literal,
   literal,
+  type NamedNode,
   namedNode,
   type Quad_Predicate,
   type Quad_Subject,
@@ -32,7 +35,7 @@ export const formatAddress = (address: PostalAddress, locale = "ja") => {
 };
 
 const owlRules: Record<string, string> = import.meta.glob(
-  "/node_modules/eye-reasoning/rpo/owl-*.n3",
+  "/node_modules/eye-reasoning/rpo/{owl-equivalentClass,owl-equivalentProperty,owl-inverseOf,owl-sameAs}.n3",
   {
     eager: true,
     query: "raw",
@@ -88,8 +91,12 @@ export const jsonLdToNQuads = async (ontology: string, jsonLd: object) => {
 
   const store = new Store();
   for (const q of result) {
-    // biome-ignore lint/suspicious/noExplicitAny: _
-    const toOxiTerm = (term: any) => {
+    const toOxiTerm = (term: {
+      termType: string;
+      value: string;
+      language?: string;
+      datatype?: { value: string };
+    }) => {
       if (term.termType === "NamedNode") {
         return namedNode(term.value);
       }
@@ -118,29 +125,75 @@ export const jsonLdToNQuads = async (ontology: string, jsonLd: object) => {
     } catch {}
   }
 
-  const cleanResult = store.query(`
-    PREFIX uatr: <https://uec-atlas.e-chan1007.workers.dev/resources/>
-    PREFIX owl: <http://www.w3.org/2002/07/owl#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+  const uatrPrefix = "https://uec-atlas.e-chan1007.workers.dev/resources/";
+  const queue: (NamedNode | BlankNode)[] = [];
+  const visited = new Set<string>();
+  const toKey = (term: NamedNode | BlankNode | Literal) =>
+    `${term.termType}:${term.value}`;
 
-    CONSTRUCT { ?s ?p ?o }
-    WHERE {
-      ?s ?p ?o .
-      FILTER(?p NOT IN (owl:sameAs, rdfs:subClassOf, rdfs:subPropertyOf))
-
-      FILTER (
-        STRSTARTS(STR(?s), STR(uatr:)) ||
-        (isBlank(?s) && EXISTS {
-          ?root (!rdf:type|rdf:type)* ?s .
-          FILTER(STRSTARTS(STR(?root), STR(uatr:)))
-        })
-      )
+  // Find roots
+  for (const q of store.match(
+    undefined,
+    undefined,
+    undefined,
+    defaultGraph(),
+  )) {
+    if (
+      q.subject.termType === "NamedNode" &&
+      q.subject.value.startsWith(uatrPrefix)
+    ) {
+      const key = toKey(q.subject);
+      if (!visited.has(key)) {
+        visited.add(key);
+        queue.push(q.subject);
+      }
     }
-  `);
+  }
 
-  // biome-ignore lint/suspicious/noExplicitAny: _
-  return new Store(cleanResult as any).dump({
+  // Crawl
+  const forbiddenPredicates = new Set([
+    "http://www.w3.org/2002/07/owl#sameAs",
+    "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+    "http://www.w3.org/2000/01/rdf-schema#subPropertyOf",
+  ]);
+
+  let head = 0;
+  while (head < queue.length) {
+    const s = queue[head++];
+    for (const q of store.match(s, undefined, undefined, defaultGraph())) {
+      if (forbiddenPredicates.has(q.predicate.value)) continue;
+      // Don't follow rdf:type for reachability
+      if (
+        q.predicate.value === "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+      )
+        continue;
+
+      if (q.object.termType === "BlankNode") {
+        const key = toKey(q.object);
+        if (!visited.has(key)) {
+          visited.add(key);
+          queue.push(q.object);
+        }
+      }
+    }
+  }
+
+  const finalStore = new Store();
+  for (const sTerm of queue) {
+    for (const q of store.match(sTerm, undefined, undefined, defaultGraph())) {
+      if (forbiddenPredicates.has(q.predicate.value)) continue;
+      if (
+        q.predicate.value ===
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" &&
+        q.object.termType === "BlankNode"
+      )
+        continue;
+
+      finalStore.add(q);
+    }
+  }
+
+  return finalStore.dump({
     format: "nq",
   });
 };

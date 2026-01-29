@@ -10,9 +10,6 @@ export const allJSONLD = {
   "@context": [
     toFullURL("/schema/spatial.context.jsonld"),
     {
-      type: {
-        "@id": "type",
-      },
       features: {
         "@id": "hydra:member",
         "@container": "@set",

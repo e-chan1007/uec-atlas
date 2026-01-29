@@ -16,8 +16,10 @@ export const getStaticPaths = async () => {
 };
 
 export const getContext = async (id?: string) => {
-  const file = Object.entries(files).find(([key]) => key.endsWith(`${id}.context.jsonld`));
-  return file ? (JSON.parse(file[1]) as { "@context": ContextDefinition }) : null;
+  const file = Object.entries(files).find(([key]) =>
+    key.endsWith(`${id}.context.jsonld`),
+  );
+  return file ? (JSON.parse(file[1])["@context"] as ContextDefinition) : null;
 };
 
 export const resolveContext = async <T extends object>(doc: T): Promise<T> => {
@@ -25,17 +27,19 @@ export const resolveContext = async <T extends object>(doc: T): Promise<T> => {
   if (typeof doc !== "object" || !doc || !("@context" in doc)) return doc;
 
   const res = async (c: unknown) => {
-    if(typeof c !== "string") return c;
+    if (typeof c !== "string") return c;
     const url = new URL(c);
     const id = url.pathname.split("/").pop()?.replace(".context.jsonld", "");
     const context = await getContext(id);
-    return context?.["@context"] ?? c;
-  }
+    return context ?? c;
+  };
 
   const ctx = (doc as NodeObject)["@context"];
   return {
     ...doc,
-    "@context": Array.isArray(ctx) ? await Promise.all(ctx.map(res)) : await res(ctx),
+    "@context": Array.isArray(ctx)
+      ? await Promise.all(ctx.map(res))
+      : await res(ctx),
   } as T;
 };
 
@@ -45,10 +49,15 @@ export const GET: APIRoute = async ({ params }) => {
   if (!context) {
     return new Response("Not Found", { status: 404 });
   }
-  return new Response(JSON.stringify(context), {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/ld+json",
+  return new Response(
+    JSON.stringify({
+      "@context": context,
+    }),
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/ld+json",
+      },
     },
-  });
+  );
 };

@@ -31,9 +31,6 @@
           ]
         ]
       },
-      "geo:hasGeometry": {
-        "geo:asWKT": "POLYGON((139.54 35.65, 139.55 35.65, 139.55 35.66, 139.54 35.66, 139.54 35.65))"
-      },
       "properties": {
         "type": "Building",
         "name": {
@@ -90,9 +87,6 @@
             ]
           ]
         ]
-      },
-      "geo:hasGeometry": {
-        "geo:asWKT": "POLYGON((139.541 35.651, 139.542 35.651, 139.542 35.652, 139.541 35.652, 139.541 35.651))"
       },
       "properties": {
         "type": "Classroom",

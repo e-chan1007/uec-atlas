@@ -37,10 +37,9 @@ classes:
       - geometry
       - hasGeometry
       - properties
-    attributes:
+      - type
+    slot_usage:
       type:
-        designates_type: true
-        range: string
         equals_string: "Feature"
 
   GeometryObject:
@@ -59,10 +58,7 @@ classes:
       - intersectsPlace
       - connectedTo
       - managedBy
-    attributes:
-      type:
-        designates_type: true
-        range: string
+      - type
 
   SiteFeature:
     is_a: SpatialEntity
@@ -241,11 +237,12 @@ classes:
 
   FeatureCollection:
     tree_root: true
-    attributes:
+    slots:
+      - type
+    slot_usage:
       type:
-        slot_uri: rdf:type
-        range: string
         equals_string: "FeatureCollection"
+    attributes:
       features:
         range: SpatialEntity
         multivalued: true
