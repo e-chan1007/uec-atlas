@@ -1,0 +1,13 @@
+---
+import { formatAddress } from "@/utils/rdf";
+import type { PostalAddress } from "generated/organization";
+
+interface Props {
+  address?: PostalAddress;
+}
+
+const { address } = Astro.props;
+const addressStr = address ? formatAddress(address) : "";
+---
+
+<span>{addressStr}</span>

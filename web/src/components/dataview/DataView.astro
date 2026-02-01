@@ -1,0 +1,43 @@
+---
+import Heading2 from "../Heading2.astro";
+import type { DataViewItem } from "./types";
+
+interface Props<T extends object = object> {
+  value: T | T[];
+  items: DataViewItem<T>[];
+  class?: string;
+}
+
+const { value, items = [], class: className } = Astro.props;
+
+const resolveProps = (
+  propResolver: (props: Record<string, any>) => Record<string, any>,
+  val: any,
+) => propResolver(val);
+---
+
+<div class:list={["flex flex-col gap-2", className]}>
+  {
+    items.map((item) => {
+      if (item.type === "section" && (!item.when || item.when(value))) {
+        return (
+          <section>
+            <Heading2>{item.title}</Heading2>
+            <div class="flex flex-col gap-2">
+              <Astro.self value={value} items={item.items} />
+            </div>
+          </section>
+        );
+      }
+      if (item.type === "component") {
+        const props = resolveProps(item.props, value);
+        if (!item.when || item.when(props, value)) {
+          const { component: Component } = item;
+          // @ts-expect-error: generic component props
+          return <Component {...props} />;
+        }
+      }
+      return null;
+    })
+  }
+</div>

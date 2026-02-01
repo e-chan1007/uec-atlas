@@ -1,0 +1,8 @@
+---
+import LinkCardListSvelte from "./LinkCardList.svelte";
+import type { ComponentProps } from "./types";
+
+type Props = ComponentProps<typeof LinkCardListSvelte>;
+---
+
+<LinkCardListSvelte client:load {...Astro.props} />

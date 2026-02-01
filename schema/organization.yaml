@@ -20,7 +20,6 @@ default_prefix: uato
 
 classes:
   Organization:
-    class_uri: schema:Organization
     is_a: OrganizationBase
     mixins:
       - OrgOrganization
@@ -45,15 +44,23 @@ classes:
   OrgOrganization:
     class_uri: org:Organization
 
+  SchemaEducationalOccupationalProgram:
+    class_uri: schema:EducationalOccupationalProgram
+
+  SchemaCollegeOrUniversity:
+    class_uri: schema:CollegeOrUniversity
+
   AbstractEducationalOrganization:
     abstract: true
     description: "学生が所属する教育組織"
     is_a: Organization
-    class_uri: schema:EducationalOccupationalProgram
+    mixins:
+      - SchemaEducationalOccupationalProgram
 
   University:
     is_a: Organization
-    class_uri: schema:CollegeOrUniversity
+    mixins:
+      - SchemaCollegeOrUniversity
     description: "大学"
     slot_usage:
       id:

@@ -6,6 +6,7 @@ import type {
   Storey,
 } from "generated/spatial";
 import { toOrdinal } from "@/utils/number";
+import { formatLangString } from "@/utils/rdf";
 import type { LinkedOrganization } from "./organizations";
 
 export type RawSpatialProperties = Omit<
@@ -50,6 +51,65 @@ export type LinkedSpatialProperties = Omit<
 
 export type LinkedSpatialEntity = Omit<SpatialEntity, "properties"> & {
   properties: LinkedSpatialProperties;
+};
+
+const spatialEntityTypeOrder = [
+  "Site",
+  "Area",
+  "Gate",
+  "Building",
+  "Structure",
+  "Storey",
+  "Classroom",
+  "Restroom",
+  "Room",
+  "Bridge",
+  "Passage",
+  "Road",
+];
+
+const spatialEntityCategoryOrder = [
+  "academic",
+  "sports",
+  "office",
+  "welfare",
+  "security",
+  "monument",
+  "parking",
+  "residential",
+  "water",
+  "utility",
+];
+
+export const spatialEntitySorter = (
+  a: SpatialEntity | LinkedSpatialEntity,
+  b: SpatialEntity | LinkedSpatialEntity,
+): number => {
+  const typeAIndex = spatialEntityTypeOrder.indexOf(a.properties.type);
+  const typeBIndex = spatialEntityTypeOrder.indexOf(b.properties.type);
+  if (typeAIndex !== typeBIndex) {
+    if (typeAIndex === -1) return 1;
+    if (typeBIndex === -1) return -1;
+    return typeAIndex - typeBIndex;
+  }
+
+  if ("category" in a.properties && "category" in b.properties) {
+    const categoryAIndex = spatialEntityCategoryOrder.indexOf(
+      a.properties.category as string,
+    );
+    const categoryBIndex = spatialEntityCategoryOrder.indexOf(
+      b.properties.category as string,
+    );
+    if (categoryAIndex !== categoryBIndex) {
+      if (categoryAIndex === -1) return 1;
+      if (categoryBIndex === -1) return -1;
+      return categoryAIndex - categoryBIndex;
+    }
+  }
+
+  const nameA = formatLangString(a.properties.name, "ja");
+  const nameB = formatLangString(b.properties.name, "ja");
+  return nameA.localeCompare(nameB, "ja", { numeric: true });
 };
 
 const rawSpatial = await getCollection("spatial");
@@ -176,27 +236,32 @@ for (const [id, linked] of linkedMap) {
   linked.properties.containsPlace =
     base.properties.containsPlace
       ?.map(resolve)
-      .filter((e): e is LinkedSpatialEntity => !!e) ?? [];
+      .filter((e): e is LinkedSpatialEntity => !!e)
+      .sort(spatialEntitySorter) ?? [];
 
   linked.properties.isPartOf =
     base.properties.isPartOf
       ?.map(resolve)
-      .filter((e): e is LinkedSpatialEntity => !!e) ?? [];
+      .filter((e): e is LinkedSpatialEntity => !!e)
+      .sort(spatialEntitySorter) ?? [];
 
   linked.properties.hasPart =
     base.properties.hasPart
       ?.map(resolve)
-      .filter((e): e is LinkedSpatialEntity => !!e) ?? [];
+      .filter((e): e is LinkedSpatialEntity => !!e)
+      .sort(spatialEntitySorter) ?? [];
 
   linked.properties.connectedTo =
     base.properties.connectedTo
       ?.map(resolve)
-      .filter((e): e is LinkedSpatialEntity => !!e) ?? [];
+      .filter((e): e is LinkedSpatialEntity => !!e)
+      .sort(spatialEntitySorter) ?? [];
 
   linked.properties.intersectsPlace =
     base.properties.intersectsPlace
       ?.map(resolve)
-      .filter((e): e is LinkedSpatialEntity => !!e) ?? [];
+      .filter((e): e is LinkedSpatialEntity => !!e)
+      .sort(spatialEntitySorter) ?? [];
 }
 
 export const _spatialMap = baseDataMap;

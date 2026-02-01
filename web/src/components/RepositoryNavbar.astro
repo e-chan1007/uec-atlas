@@ -1,0 +1,32 @@
+<nav
+  class="d-navbar bg-base-100 border-b-2 border-b-primary sticky top-16 z-50 h-12 min-h-auto"
+>
+  <div class="container mx-auto flex justify-between">
+    <div class="d-navbar-start">
+      <a href="/page/" class="d-join items-center gap-2 text-lg font-bold">
+        Data Repository
+      </a>
+    </div>
+    <div class="d-navbar-end">
+      <form class="d-join" action="/page/search" method="GET">
+        <input
+          id="repository-navbar-search-input"
+          type="search"
+          class="d-input d-input-sm d-join-item"
+          placeholder="Search"
+          name="q"
+        />
+        <button class="d-btn d-btn-sm d-join-item">検索</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const searchInput = document.getElementById(
+    "repository-navbar-search-input",
+  ) as HTMLInputElement;
+
+  searchInput.value =
+    new URLSearchParams(window.location.search).get("q") ?? "";
+</script>

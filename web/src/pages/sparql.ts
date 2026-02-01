@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { initOxigraph, Store } from "@/utils/oxigraph";
 import { toFullURL } from "@/utils/url";
+import { ontologyFiles } from "./ontology/[path].ttl";
 
 let cachedStore: Store | null = null;
 
@@ -39,10 +40,14 @@ async function getStore(runtimeFetch: typeof fetch) {
       return res.text();
     }),
   );
+  const ontologyList = Object.values(ontologyFiles);
 
   const store = new Store();
   for (const nquads of nquadsList) {
     store.load(nquads, { format: "application/n-quads" });
+  }
+  for (const ontology of ontologyList) {
+    store.load(ontology, { format: "text/turtle" });
   }
 
   cachedStore = store;

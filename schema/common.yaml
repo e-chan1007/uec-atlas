@@ -48,7 +48,8 @@ classes:
     slots:
       - id
   PostalAddress:
-    class_uri: schema:PostalAddress
+    mixins:
+      - SchemaPostalAddress
     attributes:
       streetAddress:
         description: "丁目・番地"
@@ -73,9 +74,17 @@ classes:
         range: string
   OrganizationBase:
     is_a: NamedThingWithId
-    class_uri: schema:Organization
+    mixins:
+      - SchemaOrganization
   SpatialPropertiesBase:
     is_a: NamedThing
+    mixins:
+      - GeoFeature
+  SchemaOrganization:
+    class_uri: schema:Organization
+  SchemaPostalAddress:
+    class_uri: schema:PostalAddress
+  GeoFeature:
     class_uri: geo:Feature
 
 slots:
@@ -89,11 +98,13 @@ slots:
     range: string
     annotations:
       jsonld_id: "@type"
+  rdfsLabel:
+    slot_uri: rdfs:label
   name:
     description: "名称"
     slot_uri: schema:name
-    exact_mappings:
-      - rdfs:label
+    mixins:
+      - rdfsLabel
     range: I18NString
     inlined: true
     multivalued: true

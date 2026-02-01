@@ -2,17 +2,15 @@
 import CardBreadcrumb from "@/components/CardBreadcrumb.astro";
 import Heading1 from "@/components/Heading1.astro";
 import Heading2 from "@/components/Heading2.astro";
-import JSONLDPreview from "@/components/JSONLDPreview.astro";
+import DataView from "@/components/dataview/DataView.astro";
+import JSONLDPreview from "@/components/dataview/JSONLDPreview.astro";
+import { organizationDataView } from "@/components/dataview/definitions/organization";
 import { linkedOrganizationMap, organizationMap } from "@/data";
-import {
-  getReverseRelation,
-  type LinkedOrganization,
-} from "@/data/organizations";
-import Layout from "@/layouts/Layout.astro";
+import { type LinkedOrganization } from "@/data/organizations";
+import DataRepositoryLayout from "@/layouts/DataRepositoryLayout.astro";
 import { organizationJsonLdMap } from "@/pages/data/organizations/[id]";
 import { formatLangString } from "@/utils/rdf";
 import { expandURI } from "@/utils/url";
-import { Icon } from "astro-icon/components";
 
 export const prerender = true;
 
@@ -42,7 +40,7 @@ const getAncestors = (org: LinkedOrganization): LinkedOrganization[] => {
 const ancestors = getAncestors(organization);
 
 const breadcrumbItems = [
-  { label: "Home", href: "/", icon: "mdi:home" },
+  { label: "Home", href: "/page/", icon: "mdi:home" },
   {
     label: "Organizations",
     href: "/page/organizations/",
@@ -58,11 +56,9 @@ const breadcrumbItems = [
     label: formatLangString(organization.name),
   },
 ];
-
-const reverseRelations = getReverseRelation(currentId);
 ---
 
-<Layout>
+<DataRepositoryLayout>
   <CardBreadcrumb items={breadcrumbItems} />
   <Heading1>
     <span slot="subtitle"
@@ -71,192 +67,12 @@ const reverseRelations = getReverseRelation(currentId);
     <span>{formatLangString(organization.name, "ja", "無名の組織")}</span>
   </Heading1>
 
-  {
-    organization.hasSubOrganization.length > 0 && (
-      <Fragment>
-        <Heading2>下位組織</Heading2>
-        <ul class="flex flex-col gap-2">
-          {organization.hasSubOrganization.map((subOrg) => (
-            <li>
-              <a
-                class="flex flex-row items-center justify-between rounded-md p-4 hover:bg-base-200 transition-colors border border-base-300 hover:border-primary"
-                href={expandURI(subOrg.id)}
-              >
-                <div class="flex flex-col gap-1">
-                  <h3 class="flex flex-row gap-2 items-baseline">
-                    <span class="font-bold">
-                      {formatLangString(subOrg.name, "ja", "無名の組織")}
-                    </span>
-                    <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                      {subOrg.type}
-                    </span>
-                  </h3>
-                  <p class="text-xs text-base-content/70">
-                    {formatLangString(
-                      subOrg.name,
-                      "en",
-                      "Unnamed Organization",
-                    )}
-                  </p>
-                </div>
-                <Icon name="mdi:chevron-right" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Fragment>
-    )
-  }
-
-  {
-    organization.relatedTo.length > 0 && (
-      <Fragment>
-        <Heading2>関連組織</Heading2>
-        <ul class="flex flex-col gap-2">
-          {organization.relatedTo.map(({ type, target }) => (
-            <li>
-              <a
-                class="flex flex-row items-center justify-between rounded-md p-4 hover:bg-base-200 transition-colors border border-base-300 hover:border-primary"
-                href={expandURI(target.id)}
-              >
-                <div class="flex flex-col gap-1">
-                  <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                    {type}
-                  </span>
-                  <h3 class="flex flex-row gap-2 items-baseline">
-                    <span class="font-bold">
-                      {formatLangString(target.name, "ja", "無名の組織")}
-                    </span>
-                    <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                      {target.type}
-                    </span>
-                  </h3>
-                  <p class="text-xs text-base-content/70">
-                    {formatLangString(
-                      target.name,
-                      "en",
-                      "Unnamed Organization",
-                    )}
-                  </p>
-                </div>
-                <Icon name="mdi:chevron-right" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Fragment>
-    )
-  }
-
-  {
-    reverseRelations.length > 0 && (
-      <Fragment>
-        <Heading2>関連組織(逆関係)</Heading2>
-        <ul class="flex flex-col gap-2">
-          {reverseRelations.map(({ type, target }) => (
-            <li>
-              <a
-                class="flex flex-row items-center justify-between rounded-md p-4 hover:bg-base-200 transition-colors border border-base-300 hover:border-primary"
-                href={expandURI(target.id)}
-              >
-                <div class="flex flex-col gap-1">
-                  <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                    {type}
-                  </span>
-                  <h3 class="flex flex-row gap-2 items-baseline">
-                    <span class="font-bold">
-                      {formatLangString(target.name, "ja", "無名の組織")}
-                    </span>
-                    <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                      {target.type}
-                    </span>
-                  </h3>
-                  <p class="text-xs text-base-content/70">
-                    {formatLangString(
-                      target.name,
-                      "en",
-                      "Unnamed Organization",
-                    )}
-                  </p>
-                </div>
-                <Icon name="mdi:chevron-right" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Fragment>
-    )
-  }
-
-  {
-    organization.manages.length > 0 && (
-      <Fragment>
-        <Heading2>管理施設</Heading2>
-        <ul class="flex flex-col gap-2">
-          {organization.manages.map((managedSpatial) => (
-            <li>
-              <a
-                class="flex flex-row items-center justify-between rounded-md p-4 hover:bg-base-200 transition-colors border border-base-300 hover:border-primary"
-                href={expandURI(managedSpatial.id)}
-              >
-                <div class="flex flex-col gap-1">
-                  <h3 class="flex flex-row gap-2 items-baseline">
-                    <span class="font-bold">
-                      {formatLangString(
-                        managedSpatial.properties.name,
-                        "ja",
-                        "無名の地理情報",
-                      )}
-                    </span>
-                    <span class="d-badge d-badge-primary d-badge-soft d-badge-sm">
-                      {managedSpatial.properties.type}
-                    </span>
-                  </h3>
-                  <p class="text-xs text-base-content/70">
-                    {formatLangString(
-                      managedSpatial.properties.name,
-                      "en",
-                      "Unnamed Spatial Entity",
-                    )}
-                  </p>
-                </div>
-                <Icon name="mdi:chevron-right" />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Fragment>
-    )
-  }
+  <DataView value={organization} items={organizationDataView} />
 
   <Heading2>JSON-LD</Heading2>
-
-  <div class="d-join w-full mb-2">
-    <input class="d-input d-join-item w-full" readonly value={fullURL} />
-    <button class="d-btn d-join-item copy" data-value={fullURL}>
-      <Icon name="mdi:content-copy" />
-    </button>
-    <a
-      class="d-btn d-join-item"
-      href={fullURL.replace("/resources/", "/data/")}
-      target="_blank"
-    >
-      <Icon name="mdi:external-link" />
-    </a>
-  </div>
-
   <JSONLDPreview
     code={JSON.stringify(organizationJsonLD, null, 2)}
     ontology="organization"
+    fullURL={fullURL}
   />
-</Layout>
-
-<script>
-  document.querySelector(".copy")?.addEventListener("click", (event) => {
-    const button = event.currentTarget as HTMLButtonElement;
-    const value = button.getAttribute("data-value");
-    if (value) {
-      navigator.clipboard.writeText(value);
-    }
-  });
-</script>
+</DataRepositoryLayout>

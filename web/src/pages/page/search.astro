@@ -1,0 +1,105 @@
+---
+import LinkCardList from "@/components/dataview/LinkCardList.astro";
+import Heading1 from "@/components/Heading1.astro";
+import DataRepositoryLayout from "@/layouts/DataRepositoryLayout.astro";
+import { toFullURL } from "@/utils/url";
+
+const query = Astro.url.searchParams.get("q") || "";
+const searchWords = query.trim().split(/\s+/).filter(Boolean);
+const escapedWords = searchWords.map((word) =>
+  word.replace(/\\/g, "\\\\").replace(/"/g, '\\"'),
+);
+
+const filterClauses = escapedWords
+  .map(
+    (word, index) => `
+  BIND("${word}" AS ?word${index})
+  FILTER(
+    CONTAINS(LCASE(STR(COALESCE(?nameJa, ""))), LCASE(?word${index})) ||
+    CONTAINS(LCASE(STR(COALESCE(?nameEn, ""))), LCASE(?word${index})) ||
+    CONTAINS(LCASE(STR(COALESCE(?description, ""))), LCASE(?word${index})) ||
+    CONTAINS(LCASE(STR(COALESCE(?alternateName, ""))), LCASE(?word${index}))
+  )
+`,
+  )
+  .join("\n");
+
+const sparqlQuery = `
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?sub (SAMPLE(?nameJa) AS ?nameJa) (SAMPLE(?nameEn) AS ?nameEn) (SAMPLE(?type) AS ?type) WHERE {
+  ?sub rdf:type ?type .
+  OPTIONAL { ?sub rdfs:label ?nameJa . FILTER(lang(?nameJa) = "ja") }
+  OPTIONAL { ?sub rdfs:label ?nameEn . FILTER(lang(?nameEn) = "en") }
+
+  OPTIONAL { ?sub schema:name ?searchName . }
+  OPTIONAL { ?sub schema:description ?description . }
+  OPTIONAL { ?sub schema:alternateName ?alternateName . }
+  ${filterClauses}
+
+  FILTER NOT EXISTS {
+    ?sub rdf:type ?other .
+    ?other rdfs:subClassOf+ ?type .
+    FILTER (?other != ?type)
+  }
+} GROUP BY ?sub
+`;
+
+const searchResult = await Astro.locals.runtime.env.SELF.fetch(
+  toFullURL("/sparql"),
+  {
+    method: "POST",
+    headers: {
+      Accept: "application/sparql-results+json",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ query: sparqlQuery }),
+  },
+).then((res) => res.json());
+
+interface SearchResultBinding {
+  sub: { value: string };
+  nameJa: { value: string };
+  nameEn: { value: string };
+  type: { value: string };
+}
+
+const results = (searchResult.results.bindings as SearchResultBinding[]).map(
+  (binding) => ({
+    id: binding.sub.value,
+    name: {
+      ja: binding.nameJa.value,
+      en: binding.nameEn.value,
+    },
+    type: binding.type.value,
+  }),
+);
+---
+
+<DataRepositoryLayout>
+  <Heading1>
+    <span>"{query}"の検索結果</span>
+  </Heading1>
+
+  {
+    results.length === 0 ? (
+      <p>結果が見つかりませんでした。</p>
+    ) : (
+      <LinkCardList
+        items={results.map((item) => ({
+          uri: item.id,
+          name: item.name,
+          tags: [new URL(item.type).pathname.split("/").pop()].filter(
+            (v): v is string => !!v,
+          ),
+        }))}
+        fallbackName={{
+          ja: "無名の要素",
+          en: "Unnamed Result",
+        }}
+      />
+    )
+  }
+</DataRepositoryLayout>

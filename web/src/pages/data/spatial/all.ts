@@ -1,10 +1,13 @@
 import type { APIRoute } from "astro";
 import { spatialMap } from "@/data";
+import { spatialEntitySorter } from "@/data/spatial";
 import { toFullURL } from "@/utils/url";
 
 export const prerender = true;
 
-const allSpatialEntities = Array.from(spatialMap.values());
+const allSpatialEntities = Array.from(spatialMap.values()).sort(
+  spatialEntitySorter,
+);
 
 export const allJSONLD = {
   "@context": [

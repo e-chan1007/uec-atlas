@@ -19,6 +19,15 @@ import { Icon } from "astro-icon/components";
       <Icon name="mdi:github" class="inline-block w-5 h-5 mr-2" />
       GitHubリポジトリ
     </a>
+    <form class="d-join" action="/page/search">
+      <input
+        type="text"
+        name="q"
+        class="d-join-item d-input"
+        placeholder="検索語を入力"
+      />
+      <button type="submit" class="d-join-item d-btn">検索</button>
+    </form>
   </div>
 </header>
 

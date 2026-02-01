@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 
 export const prerender = true;
 
-const ontologyFiles = import.meta.glob("../../../../generated/*.ttl", {
+export const ontologyFiles = import.meta.glob("../../../../generated/*.ttl", {
   query: "?raw",
   import: "default",
   eager: true,

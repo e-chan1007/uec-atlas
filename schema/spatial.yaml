@@ -70,7 +70,8 @@ enums:
 
 classes:
   SpatialEntity:
-    class_uri: geo:Feature
+    mixins:
+      - GeoFeature
     slots:
       - id
       - geometry
@@ -82,13 +83,15 @@ classes:
         equals_string: "Feature"
 
   GeometryObject:
-    class_uri: geo:Geometry
+    mixins:
+      - GeoGeometry
     slots:
       - asWKT
 
   SpatialProperties:
     is_a: SpatialPropertiesBase
-    class_uri: bot:Zone
+    mixins:
+      - BotZone
     slots:
       - address
       - containedInPlace
@@ -106,19 +109,22 @@ classes:
 
   SiteFeature:
     is_a: SpatialEntity
-    class_uri: schema:Place
+    mixins:
+      - SchemaPlace
     slot_usage:
       geometry: { required: false }
       properties: { range: Site }
 
   Site:
     is_a: SpatialProperties
-    class_uri: schema:Place
+    mixins:
+      - SchemaPlace
     description: "キャンパス全体"
 
   AreaFeature:
     is_a: SpatialEntity
-    class_uri: bot:Zone
+    mixins:
+      - BotZone
     slot_usage:
       properties: { range: Area }
 
@@ -134,7 +140,8 @@ classes:
       properties: { range: Structure }
 
   StructureAmenity:
-    class_uri: schema:LocationFeatureSpecification
+    mixins:
+      - SchemaLocationFeatureSpecification
     description: "構造物に付随する設備"
     attributes:
       propertyID:
@@ -311,7 +318,8 @@ classes:
 
   Restroom:
     is_a: Room
-    class_uri: schema:Restroom
+    mixins:
+      - SchemaRestroom
     description: "トイレ"
     attributes:
       gender:
@@ -339,6 +347,16 @@ classes:
     class_uri: bot:Space
   BotStorey:
     class_uri: bot:Storey
+  BotZone:
+    class_uri: bot:Zone
+  GeoGeometry:
+    class_uri: geo:Geometry
+  SchemaPlace:
+    class_uri: schema:Place
+  SchemaLocationFeatureSpecification:
+    class_uri: schema:LocationFeatureSpecification
+  SchemaRestroom:
+    class_uri: schema:Restroom
 
 slots:
   hasGeometry:

@@ -58,21 +58,7 @@ export const jsonLdToNQuads = async (ontology: string, jsonLd: object) => {
 
   await initOxigraph();
   const result = await n3reasoner(
-    [
-      nQuads,
-      ontology,
-      ...Object.values(rdfRules),
-      ...Object.values(owlRules),
-      `
-  @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-  @prefix schema: <http://schema.org/> .
-  @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-  @prefix owl: <http://www.w3.org/2002/07/owl#> .
-
-  skos:exactMatch rdfs:subPropertyOf owl:equivalentClass .
-  schema:name rdfs:subPropertyOf rdfs:label .
-  `,
-    ],
+    [nQuads, ontology, ...Object.values(rdfRules), ...Object.values(owlRules)],
     `
    @prefix log: <http://www.w3.org/2000/10/swap/log#> .
   {
