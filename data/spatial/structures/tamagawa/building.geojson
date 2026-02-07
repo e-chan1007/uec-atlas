@@ -13,7 +13,13 @@
         },
         "containedInPlace": "uatr:spatial/QDHLLYXW",
         "minFloorLevel": 1,
-        "maxFloorLevel": 1
+        "maxFloorLevel": 1,
+        "amenities": [
+          {
+            "propertyID": "aed",
+            "value": true
+          }
+        ]
       },
       "geometry": {
         "type": "Polygon",

@@ -40,7 +40,13 @@
         },
         "containedInPlace": "uatr:spatial/KNT63TOW",
         "minFloorLevel": 1,
-        "maxFloorLevel": 2
+        "maxFloorLevel": 2,
+        "amenities": [
+          {
+            "propertyID": "aed",
+            "value": true
+          }
+        ]
       }
     }
   ]

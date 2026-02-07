@@ -756,9 +756,13 @@
         "containedInPlace": "uatr:spatial/MDQKQLF4",
         "type": "Facility",
         "name": {
-          "ja": "生協食堂"
+          "ja": "生協食堂",
+          "en": "Co-op Cafeteria"
         },
         "category": "cafeteria",
+        "managedBy": [
+          "uatr:organizations/22GBCPB7"
+        ],
         "openingHoursSpecification": [
           {
             "dayOfWeek": "Monday",

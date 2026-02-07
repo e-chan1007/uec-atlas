@@ -56,7 +56,13 @@
         },
         "containedInPlace": "uatr:spatial/EFIV3IVM",
         "minFloorLevel": 1,
-        "maxFloorLevel": 1
+        "maxFloorLevel": 1,
+        "amenities": [
+          {
+            "propertyID": "aed",
+            "value": true
+          }
+        ]
       }
     }
   ]

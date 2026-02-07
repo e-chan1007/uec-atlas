@@ -5,12 +5,9 @@ import type { Plugin } from "vite";
 
 const require = createRequire(import.meta.url);
 
-/**
- * Vite plugin to generate an SVG sprite from Iconify icons used in the project.
- * Scans for <Icon name="..." /> in Astro/Svelte and defineIcons([...]) in TS/JS.
- */
 export function iconSpritePlugin(): Plugin {
   const iconIds = new Set<string>();
+  // biome-ignore lint/suspicious/noExplicitAny: IconifyJSON
   const collections: Record<string, any> = {};
 
   let spriteCache = "";
@@ -20,7 +17,7 @@ export function iconSpritePlugin(): Plugin {
   async function getSprite(): Promise<string> {
     if (spriteCache && iconIds.size === lastIconCount) return spriteCache;
 
-    return (buildPromise ??= (async () => {
+    buildPromise ??= (async () => {
       try {
         const sortedIds = [...iconIds].sort();
         let symbols = "";
@@ -57,7 +54,9 @@ export function iconSpritePlugin(): Plugin {
       } finally {
         buildPromise = null;
       }
-    })());
+    })();
+
+    return buildPromise;
   }
 
   return {

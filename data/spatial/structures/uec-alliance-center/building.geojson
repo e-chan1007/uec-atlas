@@ -40,7 +40,13 @@
         },
         "containedInPlace": "uatr:spatial/SKOL7UDT",
         "minFloorLevel": 1,
-        "maxFloorLevel": 5
+        "maxFloorLevel": 5,
+        "amenities": [
+          {
+            "propertyID": "aed",
+            "value": true
+          }
+        ]
       }
     }
   ]

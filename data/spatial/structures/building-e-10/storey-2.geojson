@@ -51,7 +51,10 @@
         "name": {
           "ja": "第2展示室"
         },
-        "usage": "museum"
+        "usage": "museum",
+        "isPartOf": [
+          "uatr:spatial/NSE5X2WH"
+        ]
       }
     },
     {
@@ -90,7 +93,10 @@
         "name": {
           "ja": "第3展示室"
         },
-        "usage": "museum"
+        "usage": "museum",
+        "isPartOf": [
+          "uatr:spatial/NSE5X2WH"
+        ]
       }
     },
     {
@@ -129,7 +135,10 @@
         "name": {
           "ja": "第4展示室"
         },
-        "usage": "museum"
+        "usage": "museum",
+        "isPartOf": [
+          "uatr:spatial/NSE5X2WH"
+        ]
       }
     },
     {
@@ -329,7 +338,10 @@
         "name": {
           "ja": "第5展示室"
         },
-        "usage": "museum"
+        "usage": "museum",
+        "isPartOf": [
+          "uatr:spatial/NSE5X2WH"
+        ]
       }
     },
     {
@@ -380,7 +392,10 @@
         "name": {
           "ja": "第6展示室"
         },
-        "usage": "museum"
+        "usage": "museum",
+        "isPartOf": [
+          "uatr:spatial/NSE5X2WH"
+        ]
       }
     }
   ]

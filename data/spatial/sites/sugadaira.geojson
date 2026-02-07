@@ -11,6 +11,14 @@
           "ja": "菅平地区",
           "en": "Sugadaira District"
         },
+        "alternateName": {
+          "ja": [
+            "菅平宇宙電波観測所"
+          ],
+          "en": [
+            "Sugadaira Space Radio Observatory"
+          ]
+        },
         "address": {
           "streetAddress": {
             "en": "1223 Sugadaira-Kogen",

@@ -741,7 +741,34 @@
         "category": "office",
         "name": {
           "ja": "情報基盤センター 業務事務室"
-        }
+        },
+        "openingHoursSpecification": [
+          {
+            "dayOfWeek": "Monday",
+            "opens": "09:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Tuesday",
+            "opens": "09:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Wednesday",
+            "opens": "09:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Thursday",
+            "opens": "09:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Friday",
+            "opens": "09:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          }
+        ]
       }
     },
     {

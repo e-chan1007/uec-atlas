@@ -239,6 +239,7 @@ classes:
         range: StructureBoundaryType
         description: "構造物の境界種別"
       amenities:
+        slot_uri: schema:amenityFeature
         range: StructureAmenity
         inlined: true
         inlined_as_list: true

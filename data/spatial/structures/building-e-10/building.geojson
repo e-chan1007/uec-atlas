@@ -50,6 +50,62 @@
         "minFloorLevel": 1,
         "maxFloorLevel": 4
       }
+    },
+    {
+      "id": "uatr:spatial/NSE5X2WH",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "type": "Facility",
+        "category": "museum",
+        "name": {
+          "ja": "UECコミュニケーションミュージアム",
+          "en": "UEC Communication Museum"
+        },
+        "containedInPlace": "uatr:spatial/ZTEI3JAZ",
+        "openingHoursSpecification": [
+          {
+            "dayOfWeek": "Tuesday",
+            "opens": "10:30:00+09:00",
+            "closes": "12:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Tuesday",
+            "opens": "13:00:00+09:00",
+            "closes": "16:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Wednesday",
+            "opens": "10:30:00+09:00",
+            "closes": "12:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Wednesday",
+            "opens": "13:00:00+09:00",
+            "closes": "16:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Thursday",
+            "opens": "10:30:00+09:00",
+            "closes": "12:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Thursday",
+            "opens": "13:00:00+09:00",
+            "closes": "16:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Friday",
+            "opens": "10:30:00+09:00",
+            "closes": "12:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Friday",
+            "opens": "13:00:00+09:00",
+            "closes": "16:00:00+09:00"
+          }
+        ]
+      }
     }
   ]
 }

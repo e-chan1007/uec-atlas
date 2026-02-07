@@ -574,7 +574,10 @@
         "name": {
           "ja": "洋図書 開架"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -804,7 +807,10 @@
         "name": {
           "ja": "和図書 開架 (人文・社会系)"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -890,7 +896,10 @@
         "name": {
           "ja": "グループ学習室1"
         },
-        "usage": "group_study"
+        "usage": "group_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -957,7 +966,10 @@
         "name": {
           "ja": "学習支援室"
         },
-        "usage": "group_study"
+        "usage": "group_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1000,7 +1012,10 @@
         "name": {
           "ja": "情報用自習室"
         },
-        "usage": "self_study"
+        "usage": "self_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1047,7 +1062,10 @@
         "name": {
           "ja": "和図書 開架 (人文・社会系)"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1165,7 +1183,10 @@
         "name": {
           "ja": "外国語"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1243,7 +1264,10 @@
         "name": {
           "ja": "グループ学習室2"
         },
-        "usage": "group_study"
+        "usage": "group_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1364,7 +1388,10 @@
         "name": {
           "ja": "グループ学習室3"
         },
-        "usage": "group_study"
+        "usage": "group_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1450,7 +1477,10 @@
         "name": {
           "ja": "AVメディア室"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1489,7 +1519,10 @@
         "name": {
           "ja": "AV視聴室"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1528,7 +1561,10 @@
         "name": {
           "ja": "個人ブース"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1567,7 +1603,10 @@
         "name": {
           "ja": "自習室"
         },
-        "usage": "self_study"
+        "usage": "self_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {

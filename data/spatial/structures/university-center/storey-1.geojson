@@ -117,9 +117,13 @@
         "containedInPlace": "uatr:spatial/2Z7LSPE6",
         "type": "Facility",
         "name": {
-          "ja": "コープショップ"
+          "ja": "コープショップ",
+          "en": "Co-op Shop"
         },
         "category": "shop",
+        "managedBy": [
+          "uatr:organizations/22GBCPB7"
+        ],
         "openingHoursSpecification": [
           {
             "dayOfWeek": "Monday",
@@ -413,9 +417,13 @@
         "containedInPlace": "uatr:spatial/2Z7LSPE6",
         "type": "Facility",
         "name": {
-          "ja": "カットサロンRen"
+          "ja": "カットサロンRen",
+          "en": "Cut Salon Ren"
         },
         "category": "shop",
+        "managedBy": [
+          "uatr:organizations/22GBCPB7"
+        ],
         "openingHoursSpecification": [
           {
             "dayOfWeek": "Monday",
@@ -537,8 +545,12 @@
         "type": "Facility",
         "category": "office",
         "name": {
-          "ja": "生協事務室"
+          "ja": "生協事務室",
+          "en": "Co-op Office"
         },
+        "managedBy": [
+          "uatr:organizations/22GBCPB7"
+        ],
         "openingHoursSpecification": [
           {
             "dayOfWeek": "Monday",

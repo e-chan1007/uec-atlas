@@ -1,0 +1,89 @@
+---
+import { formatLangString } from "@/utils/rdf";
+import type {
+  I18NString,
+  SchemaOpeningHoursSpecification,
+} from "generated/organization";
+
+interface Props {
+  openingHours: SchemaOpeningHoursSpecification[];
+}
+const props = Astro.props;
+
+const DAYS_MAP: Record<string, I18NString> = {
+  Monday: {
+    en: "Monday",
+    ja: "月曜日",
+  },
+  Tuesday: {
+    en: "Tuesday",
+    ja: "火曜日",
+  },
+  Wednesday: {
+    en: "Wednesday",
+    ja: "水曜日",
+  },
+  Thursday: {
+    en: "Thursday",
+    ja: "木曜日",
+  },
+  Friday: {
+    en: "Friday",
+    ja: "金曜日",
+  },
+  Saturday: {
+    en: "Saturday",
+    ja: "土曜日",
+  },
+  Sunday: {
+    en: "Sunday",
+    ja: "日曜日",
+  },
+  PublicHolidays: {
+    en: "Public Holidays",
+    ja: "祝日・休日",
+  },
+};
+---
+
+<div
+  class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100"
+>
+  <table class="d-table">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>曜日</th>
+        <th>利用時間</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        Object.entries(DAYS_MAP).map(([dayKey, dayName]) => {
+          const hours = props.openingHours.filter(
+            (oh) => oh.dayOfWeek === dayKey,
+          );
+          if (hours.length === 0) {
+            return (
+              <tr>
+                <th>{formatLangString(dayName, "ja")}</th>
+                <td>{formatLangString({ en: "Closed", ja: "休業" }, "ja")}</td>
+              </tr>
+            );
+          }
+          const opens = hours.map((h) => h.opens?.slice(0, 5));
+          const closes = hours.map((h) => h.closes?.slice(0, 5));
+          const hoursStr = opens
+            .map((open, idx) => `${open} - ${closes[idx]}`)
+            .join(", ");
+          return (
+            <tr>
+              <th>{formatLangString(dayName, "ja")}</th>
+              <td>{hoursStr}</td>
+            </tr>
+          );
+        })
+      }
+    </tbody>
+  </table>
+</div>

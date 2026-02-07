@@ -756,7 +756,10 @@
         "name": {
           "ja": "新着雑誌"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -835,7 +838,10 @@
         "name": {
           "ja": "洋雑誌 開架"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1015,7 +1021,10 @@
         "name": {
           "ja": "和雑誌 開架"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1167,7 +1176,10 @@
         "name": {
           "ja": "製本洋雑誌開架書庫"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1214,7 +1226,10 @@
         "name": {
           "ja": "製本和雑誌開架書庫"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {

@@ -647,7 +647,10 @@
         "name": {
           "ja": "和図書 開架 (工学系・自然系)"
         },
-        "usage": "library"
+        "usage": "library",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1012,9 +1015,13 @@
         "containedInPlace": "uatr:spatial/XX7LKCF6",
         "type": "Facility",
         "category": "office",
+        "boundaryType": "open",
         "name": {
           "ja": "サービスカウンター"
-        }
+        },
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1153,7 +1160,10 @@
         "name": {
           "ja": "UEC Ambient Intelligence Agora"
         },
-        "usage": "group_study"
+        "usage": "group_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {
@@ -1435,7 +1445,10 @@
         "name": {
           "ja": "情報用自習室"
         },
-        "usage": "self_study"
+        "usage": "self_study",
+        "isPartOf": [
+          "uatr:spatial/GAGQV65D"
+        ]
       }
     },
     {

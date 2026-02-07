@@ -57,6 +57,10 @@ classes:
     mixins:
       - SchemaEducationalOccupationalProgram
 
+  ExternalOrganization:
+    is_a: Organization
+    description: "外部組織"
+
   University:
     is_a: Organization
     mixins:

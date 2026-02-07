@@ -1,6 +1,10 @@
+import type { SchemaOpeningHoursSpecification } from "generated/organization";
+import type { StructureAmenity } from "generated/spatial";
 import type { LinkedSpatialEntity, RawSpatialEntity } from "@/data/spatial";
 import AddressView from "../AddressView.astro";
 import LinkCardList from "../LinkCardList.astro";
+import OpeningHoursView from "../OpeningHoursView.astro";
+import StructureAmenityList from "../StructureAmenityList.astro";
 import { defineDataViewItems } from "../types";
 
 const createSpatialLinkCardSection = (
@@ -12,18 +16,18 @@ const createSpatialLinkCardSection = (
       sectionItem({
         type: "section",
         title,
-        when: (value) =>
-          (Array.isArray(value.properties[key]) &&
-            (value.properties[key] as LinkedSpatialEntity[]).length > 0) ||
-          (!!value.properties[key] && !Array.isArray(value.properties[key])),
+        when: (item) =>
+          (Array.isArray(item.properties[key]) &&
+            (item.properties[key] as LinkedSpatialEntity[]).length > 0) ||
+          (!!item.properties[key] && !Array.isArray(item.properties[key])),
         items: [
           componentItem({
             type: "component",
             component: LinkCardList,
-            props: (value) => {
-              const values = Array.isArray(value.properties[key])
-                ? value.properties[key]
-                : [value.properties[key]];
+            props: (item) => {
+              const values = Array.isArray(item.properties[key])
+                ? item.properties[key]
+                : [item.properties[key]];
               return {
                 items: values.map((place) => ({
                   name: place.properties.name,
@@ -44,6 +48,17 @@ const createSpatialLinkCardSection = (
 
 export const spatialDataView = defineDataViewItems<LinkedSpatialEntity>()(
   ({ componentItem, sectionItem }) => [
+    componentItem({
+      type: "component",
+      component: StructureAmenityList,
+      when: (props) => props.amenities.length > 0,
+      props: (item) => ({
+        amenities:
+          "amenities" in item.properties
+            ? (item.properties.amenities as StructureAmenity[])
+            : [],
+      }),
+    }),
     sectionItem({
       type: "section",
       title: "所在地",
@@ -60,7 +75,27 @@ export const spatialDataView = defineDataViewItems<LinkedSpatialEntity>()(
     }),
     sectionItem({
       type: "section",
-      title: "管理する組織",
+      title: "利用時間",
+      when: (item) =>
+        "openingHoursSpecification" in item.properties &&
+        Array.isArray(item.properties.openingHoursSpecification),
+      items: [
+        componentItem({
+          type: "component",
+          component: OpeningHoursView,
+          props: (item) => ({
+            openingHours:
+              "openingHoursSpecification" in item.properties
+                ? (item.properties
+                    .openingHoursSpecification as SchemaOpeningHoursSpecification[])
+                : [],
+          }),
+        }),
+      ],
+    }),
+    sectionItem({
+      type: "section",
+      title: "運営組織",
       when: (item) => item.properties.managedBy.length > 0,
       items: [
         componentItem({

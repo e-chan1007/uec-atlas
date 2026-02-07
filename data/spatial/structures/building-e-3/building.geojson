@@ -150,7 +150,59 @@
         },
         "containedInPlace": "uatr:spatial/EFIV3IVM",
         "minFloorLevel": -1,
-        "maxFloorLevel": 10
+        "maxFloorLevel": 10,
+        "amenities": [
+          {
+            "propertyID": "aed",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "uatr:spatial/GAGQV65D",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "type": "Facility",
+        "name": {
+          "ja": "電気通信大学附属図書館",
+          "en": "The University of Electro-Communications Library"
+        },
+        "category": "library",
+        "containedInPlace": "uatr:spatial/ORU23AVH",
+        "openingHoursSpecification": [
+          {
+            "dayOfWeek": "Monday",
+            "opens": "09:00:00+09:00",
+            "closes": "21:30:00+09:00"
+          },
+          {
+            "dayOfWeek": "Tuesday",
+            "opens": "09:00:00+09:00",
+            "closes": "21:30:00+09:00"
+          },
+          {
+            "dayOfWeek": "Wednesday",
+            "opens": "09:00:00+09:00",
+            "closes": "21:30:00+09:00"
+          },
+          {
+            "dayOfWeek": "Thursday",
+            "opens": "09:00:00+09:00",
+            "closes": "21:30:00+09:00"
+          },
+          {
+            "dayOfWeek": "Friday",
+            "opens": "09:00:00+09:00",
+            "closes": "19:00:00+09:00"
+          },
+          {
+            "dayOfWeek": "Saturday",
+            "opens": "10:00:00+09:00",
+            "closes": "17:00:00+09:00"
+          }
+        ]
       }
     }
   ]
