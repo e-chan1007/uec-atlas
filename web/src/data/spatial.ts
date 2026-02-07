@@ -1,4 +1,5 @@
 import { getCollection } from "astro:content";
+import { area, featureCollection, polygon, simplify, union } from "@turf/turf";
 import { geoJSONToWkt } from "betterknown";
 import type {
   SpatialEntity,
@@ -61,8 +62,12 @@ const spatialEntityTypeOrder = [
   "Structure",
   "Storey",
   "Classroom",
+  "PracticeRoom",
+  "Facility",
   "Restroom",
   "Room",
+  "RoomSubZone",
+  "BuildingEntrance",
   "Bridge",
   "Passage",
   "Road",
@@ -141,10 +146,6 @@ for (const { data } of rawSpatial) {
 for (const { data } of rawSpatial) {
   const entityId = data.id;
   const p = data.properties;
-  if (data.geometry) {
-    data.hasGeometry ??= {};
-    data.hasGeometry.asWKT ??= geoJSONToWkt(data.geometry as GeoJSON.Geometry);
-  }
   if (p.containedInPlace) {
     tempMap.get(p.containedInPlace)?.containsPlace.add(entityId);
   }
@@ -212,6 +213,60 @@ for (const { data } of rawSpatial) {
       managedBy: [],
     },
   } as LinkedSpatialEntity);
+}
+
+for (const data of baseDataMap.values()) {
+  const p = data.properties;
+  if (p.type === "Storey") {
+    if (!data.geometry) {
+      const relatedGeometries: GeoJSON.Feature[] = [];
+      for (const spatialId of [
+        ...(p.containsPlace || []),
+        ...(p.intersectsPlace || []),
+      ]) {
+        const feature = rawSpatial.find((e) => e.data.id === spatialId);
+        if (feature && feature.data.geometry) {
+          const geometryType = (feature.data.geometry as GeoJSON.Geometry).type;
+          if (geometryType !== "Polygon" && geometryType !== "MultiPolygon")
+            continue;
+          relatedGeometries.push(feature.data as unknown as GeoJSON.Feature);
+        }
+      }
+      if (relatedGeometries.length === 1) {
+        data.geometry = relatedGeometries[0].geometry;
+      } else if (relatedGeometries.length > 1) {
+        const merged = union(
+          featureCollection(relatedGeometries) as GeoJSON.FeatureCollection<
+            GeoJSON.Polygon | GeoJSON.MultiPolygon
+          >,
+        );
+        if (merged) {
+          // // 小さい穴を除去
+          // if (merged.geometry.type === "Polygon") {
+          //   merged.geometry.coordinates = merged.geometry.coordinates.filter(
+          //     (ring) => {
+          //       const ringPolygon = polygon([ring]);
+          //       return area(ringPolygon) >= 0.1;
+          //     },
+          //   );
+          // } else if (merged.geometry.type === "MultiPolygon") {
+          //   merged.geometry.coordinates = merged.geometry.coordinates.map(
+          //     (polygonCoords) =>
+          //       polygonCoords.filter((ring) => {
+          //         const ringPolygon = polygon([ring]);
+          //         return area(ringPolygon) >= 0.5; // 0.5㎡未満の穴を除去
+          //       }),
+          //   );
+          // }
+          data.geometry = merged.geometry;
+        }
+      }
+    }
+  }
+  if (data.geometry) {
+    data.hasGeometry ??= {};
+    data.hasGeometry.asWKT ??= geoJSONToWkt(data.geometry as GeoJSON.Geometry);
+  }
 }
 
 for (const [id, linked] of linkedMap) {
